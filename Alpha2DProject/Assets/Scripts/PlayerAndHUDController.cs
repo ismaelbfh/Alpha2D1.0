@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAndHUDController : MonoBehaviour {
 
@@ -9,6 +10,7 @@ public class PlayerAndHUDController : MonoBehaviour {
     GameObject Jugador;
     public float velocidadJugador = 2f;
     public float fuerzaSalto;
+    public float VidaJugador;
     [SerializeField]
     public Rigidbody2D cuerpoJugador;
     [SerializeField]
@@ -17,6 +19,7 @@ public class PlayerAndHUDController : MonoBehaviour {
     public bool PulsoIz = false;
     public bool PulsoDe = false;
     public float signoPharallax = 0f;
+    Image BarraVida;
 
     private void Start()
     {
@@ -24,6 +27,8 @@ public class PlayerAndHUDController : MonoBehaviour {
         Jugador = GameObject.FindGameObjectWithTag("Player"); //Objeto Jugador
         cuerpoJugador = Jugador.GetComponent<Rigidbody2D>(); //Cuerpo del jugador
         animatorJugador = Jugador.GetComponent<Animator>(); //Animador del jugador
+        //HUD
+        BarraVida = GameObject.Find("BarraVida").GetComponent<Image>();
     }
 
     private void FixedUpdate()
@@ -84,5 +89,14 @@ public class PlayerAndHUDController : MonoBehaviour {
     {
         animatorJugador.SetFloat("vSpeed", 0);
     }
+
+    //Hacer Daño al Jugador:
+
+    public void BajarVida(float daño)
+    {
+        VidaJugador -= daño;
+        BarraVida.fillAmount = VidaJugador;
+    }
+
 
 }
