@@ -1,5 +1,5 @@
 5.6.2f1:3.1.0.0
-StandaloneWindows
+Android
 C:/Users/IsmaelBFH/Desktop/UNITY NUEVO/Editor/Data/Managed/UnityEngine.dll
 C:/Users/IsmaelBFH/Desktop/UNITY NUEVO/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll
 C:/Users/IsmaelBFH/Desktop/UNITY NUEVO/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll
