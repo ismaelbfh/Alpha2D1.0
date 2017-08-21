@@ -18,6 +18,13 @@ public class EnemySkeletonController : MonoBehaviour {
 
     //IA:
     public bool JugadorEnPlataforma = false;
+    public Vector2 posicionJugador;
+    public bool VoltearCaminar;
+    public GameObject Arma;
+    GameObject ArmaGuardada;
+    public GameObject PosicionadorArma;
+    float contadorAtaque = 1.533f;
+    float añadidorAtaque;
 
     private void Start()
     {
@@ -26,6 +33,8 @@ public class EnemySkeletonController : MonoBehaviour {
         cuerpoEnemigo = Enemigo.GetComponent<Rigidbody2D>();
         animatorEnemigo = Enemigo.GetComponent<Animator>();
         spriteRendererEnemigo = Enemigo.GetComponent<SpriteRenderer>();
+        posicionJugador = new Vector2(0,0);
+        ArmaGuardada = Arma;
     }
 
 
@@ -84,13 +93,54 @@ public class EnemySkeletonController : MonoBehaviour {
 
     private void Atacar()
     {
-        animatorEnemigo.SetBool("attack",true);
-        //Crear el sprite del cuchillo en el segundo
+        //Animación de Ataque:
+        animatorEnemigo.SetBool("attack", true);
+        //Voltear hacia la posición del jugador:
+        if (posicionJugador != (new Vector2(0, 0)))
+        {
+            //Verificar si esta de un lado u otro:
+            if (posicionJugador.x < this.transform.position.x)
+            {
+                spriteRendererEnemigo.flipX = false;
+            }
+            else
+            {
+                spriteRendererEnemigo.flipX = true;
+            }
+
+        }
+        //Crear el sprite del cuchillo en el segundo:
+        if (contadorAtaque <= 0)
+        {
+            contadorAtaque = 2.535f;
+            Arma = Instantiate(Arma,PosicionadorArma.transform.position,Arma.transform.rotation,Enemigo.transform) as GameObject;
+            if (!spriteRendererEnemigo.flipX)
+            {
+                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(-10, 0);
+            }
+            else
+            {
+                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(10, 0);
+            }
+            Arma.name = "Cuchillo1";
+            Arma = ArmaGuardada;
+        }
+        else
+        {
+            contadorAtaque -= Time.deltaTime;
+        }
+
     }
 
     private void DejarAtacar()
     {
         animatorEnemigo.SetBool("attack", false);
+        if (VoltearCaminar)
+        {
+            voltear = true;
+            VoltearCaminar = false;
+            contadorAtaque = 1.533f;
+        }
     }
 
 }

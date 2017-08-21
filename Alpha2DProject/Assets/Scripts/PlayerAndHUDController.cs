@@ -94,7 +94,7 @@ public class PlayerAndHUDController : MonoBehaviour {
 
     public void BajarVida(float daño)
     {
-        VidaJugador -= daño;
+        VidaJugador = VidaJugador - daño;
         BarraVida.fillAmount = VidaJugador;
     }
 
