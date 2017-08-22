@@ -23,8 +23,8 @@ public class EnemySkeletonController : MonoBehaviour {
     public GameObject Arma;
     GameObject ArmaGuardada;
     public GameObject PosicionadorArma;
-    float contadorAtaque = 1.533f;
-    float añadidorAtaque;
+    AnimationClip AnimacionAtaque;
+    bool lanzarCuchillo = false;
 
     private void Start()
     {
@@ -102,18 +102,20 @@ public class EnemySkeletonController : MonoBehaviour {
             if (posicionJugador.x < this.transform.position.x)
             {
                 spriteRendererEnemigo.flipX = false;
+                PosicionadorArma.transform.localPosition = new Vector3(PosicionadorArma.transform.localPosition.x * (-1), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
             }
             else
             {
                 spriteRendererEnemigo.flipX = true;
+                PosicionadorArma.transform.localPosition = new Vector3(Mathf.Abs(PosicionadorArma.transform.localPosition.x), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
             }
 
         }
         //Crear el sprite del cuchillo en el segundo:
-        if (contadorAtaque <= 0)
+        if (lanzarCuchillo)
         {
-            contadorAtaque = 2.535f;
-            Arma = Instantiate(Arma,PosicionadorArma.transform.position,Arma.transform.rotation,Enemigo.transform) as GameObject;
+            lanzarCuchillo = false;
+            Arma = Instantiate(Arma, PosicionadorArma.transform.position, Arma.transform.rotation, Enemigo.transform) as GameObject;
             if (!spriteRendererEnemigo.flipX)
             {
                 Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(-10, 0);
@@ -125,11 +127,11 @@ public class EnemySkeletonController : MonoBehaviour {
             Arma.name = "Cuchillo1";
             Arma = ArmaGuardada;
         }
-        else
-        {
-            contadorAtaque -= Time.deltaTime;
-        }
+    }
 
+    public void LanzarCuchillo()
+    {
+        lanzarCuchillo = true;
     }
 
     private void DejarAtacar()
@@ -139,7 +141,6 @@ public class EnemySkeletonController : MonoBehaviour {
         {
             voltear = true;
             VoltearCaminar = false;
-            contadorAtaque = 1.533f;
         }
     }
 
