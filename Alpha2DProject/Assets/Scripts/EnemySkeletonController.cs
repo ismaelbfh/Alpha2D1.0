@@ -114,7 +114,8 @@ public class EnemySkeletonController : MonoBehaviour {
         {
             contadorAtaque = 2.535f;
             Arma = Instantiate(Arma,PosicionadorArma.transform.position,Arma.transform.rotation,Enemigo.transform) as GameObject;
-            if (!spriteRendererEnemigo.flipX)
+
+            if (!spriteRendererEnemigo.flipX) //depende la posicion lanzalo en una posicion negativa, o positiva (derecha o izquierda)
             {
                 Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(-10, 0);
             }
