@@ -1,0 +1,330 @@
+fileFormatVersion: 2
+guid: 9269be02356490c4ba4375060ef2a4ba
+timeCreated: 1501076636
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: estatico un prite_0
+    21300002: estatico un prite_1
+    21300004: estatico un prite_2
+    21300006: estatico un prite_3
+    21300008: estatico un prite_4
+    21300010: estatico un prite_5
+    21300012: estatico un prite_6
+    21300014: estatico un prite_7
+    21300016: estatico un prite_8
+    21300018: estatico un prite_9
+    21300020: estatico un prite_10
+    21300022: estatico un prite_11
+    21300024: estatico un prite_12
+    21300026: estatico un prite_13
+    21300028: estatico un prite_14
+    21300030: estatico un prite_15
+    21300032: estatico un prite_16
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 900
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: iPhone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: estatico un prite_0
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 0
+        width: 1065
+        height: 1159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_1
+      rect:
+        serializedVersion: 2
+        x: 1433
+        y: 4
+        width: 1094
+        height: 1159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_2
+      rect:
+        serializedVersion: 2
+        x: 2596
+        y: 0
+        width: 1118
+        height: 1175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_3
+      rect:
+        serializedVersion: 2
+        x: 3867
+        y: 0
+        width: 1126
+        height: 1175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_4
+      rect:
+        serializedVersion: 2
+        x: 5118
+        y: 0
+        width: 1113
+        height: 1183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_5
+      rect:
+        serializedVersion: 2
+        x: 6358
+        y: 0
+        width: 1146
+        height: 1191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_6
+      rect:
+        serializedVersion: 2
+        x: 7686
+        y: 0
+        width: 1147
+        height: 1200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_7
+      rect:
+        serializedVersion: 2
+        x: 8991
+        y: 12
+        width: 1166
+        height: 1188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_8
+      rect:
+        serializedVersion: 2
+        x: 10320
+        y: 0
+        width: 1166
+        height: 1200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_9
+      rect:
+        serializedVersion: 2
+        x: 11648
+        y: 0
+        width: 1174
+        height: 1195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_10
+      rect:
+        serializedVersion: 2
+        x: 12977
+        y: 0
+        width: 1155
+        height: 1200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_11
+      rect:
+        serializedVersion: 2
+        x: 14255
+        y: 0
+        width: 1139
+        height: 1200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_12
+      rect:
+        serializedVersion: 2
+        x: 15565
+        y: 0
+        width: 1126
+        height: 1195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_13
+      rect:
+        serializedVersion: 2
+        x: 16864
+        y: 0
+        width: 1122
+        height: 1200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_14
+      rect:
+        serializedVersion: 2
+        x: 18233
+        y: 0
+        width: 1098
+        height: 1200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_15
+      rect:
+        serializedVersion: 2
+        x: 19465
+        y: 0
+        width: 1082
+        height: 1183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: estatico un prite_16
+      rect:
+        serializedVersion: 2
+        x: 20661
+        y: 0
+        width: 1069
+        height: 1159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
