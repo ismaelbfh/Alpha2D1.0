@@ -68,27 +68,14 @@ public class EnemySkeletonController : MonoBehaviour {
             }
         }
 
-        if (Saltar && contadorSalto <= 0)
+        if (Saltar)
         {
-            cuerpoEnemigo.velocity = new Vector3(0 /*Para que no se mueva mientras salta */, fuerzaSalto);
-            animatorEnemigo.SetFloat("vspeed", Mathf.Abs(cuerpoEnemigo.velocity.y));
-            Saltar = false;
-            contadorSalto = 3.0f;
+            animatorEnemigo.SetFloat("vspeed", 0.1f);
         }
-
-        if(contadorSalto <= 3.0f && contadorSalto > 0){
-            contadorSalto -= Time.deltaTime;
+        else
+        {
             cuerpoEnemigo.velocity = new Vector3(cuerpoEnemigo.velocity.x, cuerpoEnemigo.velocity.y - Time.deltaTime);
-            animatorEnemigo.SetFloat("vspeed", Mathf.Abs(cuerpoEnemigo.velocity.y));
-            if(cuerpoEnemigo.velocity.y < 0){
-                animatorEnemigo.SetFloat("vspeed", 0);
-            }
         }
-        else if (contadorSalto <= 0)
-        {
-            contadorSalto = 0;
-        }
-
     }
 
     private void Atacar()
@@ -141,7 +128,22 @@ public class EnemySkeletonController : MonoBehaviour {
         {
             voltear = true;
             VoltearCaminar = false;
+
         }
+    }
+
+    private void SaltarEsqueleto()
+    {
+        if (Saltar)
+        {
+            cuerpoEnemigo.velocity = new Vector3(0 /*Para que no se mueva mientras salta */, fuerzaSalto);
+        }
+    }
+
+    private void DejarSaltar()
+    {
+        Saltar = false;
+        animatorEnemigo.SetFloat("vspeed", 0);
     }
 
 }
