@@ -38,13 +38,13 @@ public class PlayerAndHUDController : MonoBehaviour {
         if (PulsoDe) //Si hemos pulsado el boton de la derecha le cambiamos escala y le aplicamos una fuerza
         {
             cuerpoJugador.velocity = new Vector2(velocidadJugador, cuerpoJugador.velocity.y);
-            Jugador.transform.localScale = new Vector3(-1f, 1f, 1f);
+            Jugador.transform.localScale = new Vector3(1f, 1f, 1f);
             signoPharallax = -1f;
         }
         else if (PulsoIz) //Si pulsamos el de la izquierda se lanzara esto
         {
             cuerpoJugador.velocity = new Vector2(-velocidadJugador, cuerpoJugador.velocity.y);
-            Jugador.transform.localScale = new Vector3(1f, 1f, 1f);
+            Jugador.transform.localScale = new Vector3(-1f, 1f, 1f);
             signoPharallax = 1f;
         }
         else //Si no es ninguna de las dos haz esto
