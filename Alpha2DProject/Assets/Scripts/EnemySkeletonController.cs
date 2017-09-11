@@ -25,6 +25,7 @@ public class EnemySkeletonController : MonoBehaviour {
     public GameObject PosicionadorArma;
     AnimationClip AnimacionAtaque;
     bool lanzarCuchillo = false;
+	public bool Caminar = false;
 
     private void Start()
     {
@@ -35,16 +36,24 @@ public class EnemySkeletonController : MonoBehaviour {
         spriteRendererEnemigo = Enemigo.GetComponent<SpriteRenderer>();
         posicionJugador = new Vector2(0,0);
         ArmaGuardada = Arma;
+		//Inicializar Modo Estatico si así debe ser:
+		if (!Caminar) {
+			//Cambiar en el animator al idle del enemigo:
+		}
     }
 
 
     void FixedUpdate()
     {
         //Caminar y Atacar:
-        if (!JugadorEnPlataforma) // Si el jugador no esta en la plataforma no atacara y caminara:
+        if (!JugadorEnPlataforma) // Si el jugador no esta en la plataforma no atacara y caminara o se mantendrá quieto:
         {
-            cuerpoEnemigo.velocity = new Vector2(velocidadCaminar, cuerpoEnemigo.velocity.y);
-            DejarAtacar();
+			if (Caminar) {
+				cuerpoEnemigo.velocity = new Vector2 (velocidadCaminar, cuerpoEnemigo.velocity.y);
+				DejarAtacar ();
+			} else { // Si el enemigo no debe caminar, se mantendra quieto, en idle.
+				DejarAtacar ();
+			}
         }
         else //En cambio si el jugador esta en la plataforma no caminara y atacara:
         {
