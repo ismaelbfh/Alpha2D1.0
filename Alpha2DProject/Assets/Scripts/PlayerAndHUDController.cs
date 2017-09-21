@@ -18,8 +18,10 @@ public class PlayerAndHUDController : MonoBehaviour {
     //Variables de HUD:
     public bool PulsoIz = false;
     public bool PulsoDe = false;
-    public float signoPharallax = 0f;
     Image BarraVida;
+
+	//Acondicionamiento a las Diferentes Pantallas:
+	float TamañoX;
 
     private void Start()
     {
@@ -29,6 +31,7 @@ public class PlayerAndHUDController : MonoBehaviour {
         animatorJugador = Jugador.GetComponent<Animator>(); //Animador del jugador
         //HUD
         BarraVida = GameObject.Find("BarraVida").GetComponent<Image>();
+		TamañoX = Jugador.transform.localScale.x;
     }
 
     private void FixedUpdate()
@@ -38,18 +41,12 @@ public class PlayerAndHUDController : MonoBehaviour {
         if (PulsoDe) //Si hemos pulsado el boton de la derecha le cambiamos escala y le aplicamos una fuerza
         {
             cuerpoJugador.velocity = new Vector2(velocidadJugador, cuerpoJugador.velocity.y);
-            Jugador.transform.localScale = new Vector3(1f, 1f, 1f);
-            signoPharallax = -1f;
+			Jugador.transform.localScale = new Vector3(TamañoX, Jugador.transform.localScale.y, 0f);
         }
         else if (PulsoIz) //Si pulsamos el de la izquierda se lanzara esto
         {
             cuerpoJugador.velocity = new Vector2(-velocidadJugador, cuerpoJugador.velocity.y);
-            Jugador.transform.localScale = new Vector3(-1f, 1f, 1f);
-            signoPharallax = 1f;
-        }
-        else //Si no es ninguna de las dos haz esto
-        {
-            signoPharallax = 0f;
+			Jugador.transform.localScale = new Vector3(-TamañoX, Jugador.transform.localScale.y, 0f);
         }
 
         animatorJugador.SetFloat("speed", Mathf.Abs(cuerpoJugador.velocity.x));
@@ -81,13 +78,12 @@ public class PlayerAndHUDController : MonoBehaviour {
     public void SaltarJugador()
     {
         cuerpoJugador.velocity = new Vector2(cuerpoJugador.velocity.x, fuerzaSalto);
-
         animatorJugador.SetFloat("vSpeed", Mathf.Abs(cuerpoJugador.velocity.y));
     }
 
     public void DejarSaltar()
     {
-        animatorJugador.SetFloat("vSpeed", 0);
+			animatorJugador.SetFloat ("vSpeed",0);
     }
 
     //Hacer Daño al Jugador:

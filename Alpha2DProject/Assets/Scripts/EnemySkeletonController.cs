@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySkeletonController : MonoBehaviour {
 
     //Variables del Enemigo:
     GameObject Enemigo;
+	Transform transformEnemigo;
     public float velocidadCaminar; 
     public float fuerzaSalto;
     public float vida = 1.0f;
     public Rigidbody2D cuerpoEnemigo;
     public Animator animatorEnemigo;
-    SpriteRenderer spriteRendererEnemigo;
+	Image ImagenRendererEnemigo;
     public bool voltear;
     public bool Saltar;
     float contadorSalto;
@@ -26,19 +28,19 @@ public class EnemySkeletonController : MonoBehaviour {
     AnimationClip AnimacionAtaque;
     bool lanzarCuchillo = false;
 	public bool Caminar = false;
+	public bool MirarHaciaIzquierda = true;
 
     private void Start()
     {
         //Inicialización:
         Enemigo = this.gameObject;
+		transformEnemigo = Enemigo.transform;
         cuerpoEnemigo = Enemigo.GetComponent<Rigidbody2D>();
         animatorEnemigo = Enemigo.GetComponent<Animator>();
-        spriteRendererEnemigo = Enemigo.GetComponent<SpriteRenderer>();
         posicionJugador = new Vector2(0,0);
         ArmaGuardada = Arma;
-		//Inicializar Modo Estatico si así debe ser:
-		if (!Caminar) {
-			//Cambiar en el animator al idle del enemigo:
+		if (!MirarHaciaIzquierda) {
+			transformEnemigo.localScale = new Vector3 (Enemigo.transform.localScale.x * -1,Enemigo.transform.localScale.y,0f);
 		}
     }
 
@@ -60,23 +62,20 @@ public class EnemySkeletonController : MonoBehaviour {
             Atacar();
         }
 
-        //Voltearse al llegar al final de la plataforma:
+        //Voltear al Enemigo
         if (voltear)
         {
-            if (spriteRendererEnemigo.flipX == true)
-            {
-                spriteRendererEnemigo.flipX = false;
-                velocidadCaminar = -velocidadCaminar;
-                voltear = false;
-            }
-            else
-            {
-                spriteRendererEnemigo.flipX = true;
-                velocidadCaminar = Mathf.Abs(velocidadCaminar);
-                voltear = false;
-            }
+			transformEnemigo.localScale = new Vector3 (Enemigo.transform.localScale.x * -1,Enemigo.transform.localScale.y,0f);
+			velocidadCaminar *= -1;
+			if (transformEnemigo.localScale.x == Mathf.Abs (transformEnemigo.localScale.x)) {
+				MirarHaciaIzquierda = true;
+			} else {
+				MirarHaciaIzquierda = false;
+			}
+			voltear = false;
         }
 
+		//Hacer que siempre valla hacia donde mira:
         if (Saltar)
         {
             animatorEnemigo.SetFloat("vspeed", 0.1f);
@@ -95,15 +94,17 @@ public class EnemySkeletonController : MonoBehaviour {
         if (posicionJugador != (new Vector2(0, 0)))
         {
             //Verificar si esta de un lado u otro:
-            if (posicionJugador.x < this.transform.position.x)
+			if (posicionJugador.x < this.transform.position.x)
             {
-                spriteRendererEnemigo.flipX = false;
+				transformEnemigo.localScale = new Vector3 (Mathf.Abs(Enemigo.transform.localScale.x),Enemigo.transform.localScale.y,0f);
                 PosicionadorArma.transform.localPosition = new Vector3(PosicionadorArma.transform.localPosition.x * (-1), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
-            }
-            else
+				MirarHaciaIzquierda = true;
+			}
+			else if(posicionJugador.x < this.transform.position.x)
             {
-                spriteRendererEnemigo.flipX = true;
+				transformEnemigo.localScale = new Vector3 (-Enemigo.transform.localScale.x,Enemigo.transform.localScale.y,0f);
                 PosicionadorArma.transform.localPosition = new Vector3(Mathf.Abs(PosicionadorArma.transform.localPosition.x), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
+				MirarHaciaIzquierda = false;
             }
 
         }
@@ -112,13 +113,13 @@ public class EnemySkeletonController : MonoBehaviour {
         {
             lanzarCuchillo = false;
             Arma = Instantiate(Arma, PosicionadorArma.transform.position, Arma.transform.rotation, Enemigo.transform) as GameObject;
-            if (!spriteRendererEnemigo.flipX)
+			if (MirarHaciaIzquierda)
             {
-                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(-10, 0);
+                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(-400, 0);
             }
             else
             {
-                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(10, 0);
+                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(400, 0);
             }
             Arma.name = "Cuchillo1";
             Arma = ArmaGuardada;
@@ -133,12 +134,13 @@ public class EnemySkeletonController : MonoBehaviour {
     private void DejarAtacar()
     {
         animatorEnemigo.SetBool("attack", false);
-        if (VoltearCaminar)
-        {
-            voltear = true;
-            VoltearCaminar = false;
-
-        }
+		if (Mathf.Abs (transformEnemigo.localScale.x) == transformEnemigo.localScale.x && Mathf.Abs (velocidadCaminar) == velocidadCaminar) {
+			velocidadCaminar = -velocidadCaminar;
+			MirarHaciaIzquierda = true;
+		} else if (Mathf.Abs (transformEnemigo.localScale.x) != transformEnemigo.localScale.x && Mathf.Abs (velocidadCaminar) != velocidadCaminar) {
+			velocidadCaminar = Mathf.Abs(velocidadCaminar);
+			MirarHaciaIzquierda = false;
+		}
     }
 
     private void SaltarEsqueleto()
@@ -152,7 +154,7 @@ public class EnemySkeletonController : MonoBehaviour {
     private void DejarSaltar()
     {
         Saltar = false;
-        animatorEnemigo.SetFloat("vspeed", 0);
+		animatorEnemigo.SetFloat("vspeed", cuerpoEnemigo.velocity.y);
     }
 
 }
