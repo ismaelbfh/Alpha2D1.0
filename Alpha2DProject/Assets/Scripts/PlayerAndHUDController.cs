@@ -83,14 +83,14 @@ public class PlayerAndHUDController : MonoBehaviour {
 
     public void DejarSaltar()
     {
-			animatorJugador.SetFloat ("vSpeed",0);
+	    animatorJugador.SetFloat ("vSpeed", 0f);
     }
 
     //Hacer Daño al Jugador:
 
     public void BajarVida(float daño)
     {
-        VidaJugador = VidaJugador - daño;
+        VidaJugador -= daño;
         BarraVida.fillAmount = VidaJugador;
     }
 
