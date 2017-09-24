@@ -4,17 +4,24 @@ using UnityEngine;
 
 public class TriggersPlatforms : MonoBehaviour {
 
-    public GameObject EsqueletoAsociado;
-    EnemySkeletonController controladorEsqueleto;
-    public bool EsEnemigo;
-    int contador = 1;
+    //Separa siempre privates de publics
 
+    private EnemySkeletonController controladorEsqueleto;
+    private int contador = 1;
+
+    public GameObject EsqueletoAsociado;
+    public bool EsEnemigo;
+    
     private void Start()
     {
        controladorEsqueleto = EsqueletoAsociado.GetComponent<EnemySkeletonController>();
     }
 
-    void OnTriggerEnter2D(Collider2D Colision)
+    /// <summary>
+    /// EXPLICAR CÓDIGO
+    /// </summary>
+    /// <param name="Colision"></param>
+    private void OnTriggerEnter2D(Collider2D Colision)
     {
         if (!EsEnemigo)
         {
@@ -30,14 +37,18 @@ public class TriggersPlatforms : MonoBehaviour {
 
             if (Colision.name == EsqueletoAsociado.name)
             {
-                controladorEsqueleto.voltear = true;
+                controladorEsqueleto.Voltear = true;
                 contador = 0;
             }
 
         }
     }
 
-    void OnTriggerExit2D(Collider2D Colision)
+    /// <summary>
+    /// EXPLICAR CODIGO
+    /// </summary>
+    /// <param name="Colision"></param>
+    private void OnTriggerExit2D(Collider2D Colision)
     {
         if (!EsEnemigo)
         {
@@ -55,13 +66,17 @@ public class TriggersPlatforms : MonoBehaviour {
         }
     }
 
-    void OnTriggerStay2D(Collider2D Colision)
+    /// <summary>
+    /// EXPLICAR CODIGO
+    /// </summary>
+    /// <param name="Colision"></param>
+    private void OnTriggerStay2D(Collider2D Colision)
     {
         if (EsEnemigo)
         {
             if (Colision.name == EsqueletoAsociado.name && contador == 1)
             {
-                controladorEsqueleto.voltear = true;
+                controladorEsqueleto.Voltear = true;
                 contador = 0;
             }
 

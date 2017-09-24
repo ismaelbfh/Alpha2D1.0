@@ -5,30 +5,91 @@ using UnityEngine.UI;
 
 public class PlayerAndHUDController : MonoBehaviour {
 
-    //Inicialización de Variables:_____________________________________________
+    //TODO: EXPLICA MEJOR LOS COMENTARIOS DE LOS METODOS
+
     //Variables del Jugador:
-    GameObject Jugador;
+    private GameObject _Jugador;
+    private float _TamañoX;
+    private Rigidbody2D _cuerpoJugador;
+    private Animator _animatorJugador;
+    private Image _BarraVida;
+
+    //PLAYER:
     public float velocidadJugador = 2f;
     public float fuerzaSalto;
     public float VidaJugador;
-    [SerializeField]
-    public Rigidbody2D cuerpoJugador;
-    [SerializeField]
-    public Animator animatorJugador;
-    //Variables de HUD:
+    //HUD:
     public bool PulsoIz = false;
     public bool PulsoDe = false;
-    Image BarraVida;
 
-	//Acondicionamiento a las Diferentes Pantallas:
-	float TamañoX;
+    //GETTERS Y SETTERS:
+    public GameObject Jugador
+    {
+        get
+        {
+            return _Jugador;
+        }
+
+        set
+        {
+            _Jugador = value;
+        }
+    }
+    public float TamañoX
+    {
+        get
+        {
+            return _TamañoX;
+        }
+
+        set
+        {
+            _TamañoX = value;
+        }
+    }
+    public Rigidbody2D CuerpoJugador
+    {
+        get
+        {
+            return _cuerpoJugador;
+        }
+
+        set
+        {
+            _cuerpoJugador = value;
+        }
+    }
+    public Animator AnimatorJugador
+    {
+        get
+        {
+            return _animatorJugador;
+        }
+
+        set
+        {
+            _animatorJugador = value;
+        }
+    }
+    public Image BarraVida
+    {
+        get
+        {
+            return _BarraVida;
+        }
+
+        set
+        {
+            _BarraVida = value;
+        }
+    }
 
     private void Start()
     {
         //Jugador:
         Jugador = GameObject.FindGameObjectWithTag("Player"); //Objeto Jugador
-        cuerpoJugador = Jugador.GetComponent<Rigidbody2D>(); //Cuerpo del jugador
-        animatorJugador = Jugador.GetComponent<Animator>(); //Animador del jugador
+        CuerpoJugador = Jugador.GetComponent<Rigidbody2D>(); //Cuerpo del jugador
+        AnimatorJugador = Jugador.GetComponent<Animator>(); //Animador del jugador
         //HUD
         BarraVida = GameObject.Find("BarraVida").GetComponent<Image>();
 		TamañoX = Jugador.transform.localScale.x;
@@ -36,63 +97,71 @@ public class PlayerAndHUDController : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        //Movimiento Player mediante los botones correspondientes___________________________________________
+        AnimatorJugador.SetFloat("speed", Mathf.Abs(CuerpoJugador.velocity.x));
 
         if (PulsoDe) //Si hemos pulsado el boton de la derecha le cambiamos escala y le aplicamos una fuerza
         {
-            cuerpoJugador.velocity = new Vector2(velocidadJugador, cuerpoJugador.velocity.y);
+            CuerpoJugador.velocity = new Vector2(velocidadJugador, CuerpoJugador.velocity.y);
 			Jugador.transform.localScale = new Vector3(TamañoX, Jugador.transform.localScale.y, 0f);
         }
         else if (PulsoIz) //Si pulsamos el de la izquierda se lanzara esto
         {
-            cuerpoJugador.velocity = new Vector2(-velocidadJugador, cuerpoJugador.velocity.y);
+            CuerpoJugador.velocity = new Vector2(-velocidadJugador, CuerpoJugador.velocity.y);
 			Jugador.transform.localScale = new Vector3(-TamañoX, Jugador.transform.localScale.y, 0f);
         }
-
-        animatorJugador.SetFloat("speed", Mathf.Abs(cuerpoJugador.velocity.x));
+    
     }
 
-    //Funcion para activar/desactivar movimiento --> Se activan mediante un objeto "Event Trigger" en los Canvas de movimiento (BotonMovimientoIz y BotonMovimientoDe)
-    //1 es Izquierda, 2 es detenido y 3 es derecha.
+    /// Funcion para activar/desactivar movimiento --> Se activan mediante un objeto "Event Trigger" en los Canvas de movimiento (BotonMovimientoIz y BotonMovimientoDe)
+    /// 1 es Izquierda, 2 es detenido y 3 es derecha.
+    /// </summary>
+    /// <param name="direccion"></param>
     public void ActivarDesactivarMovimiento(int direccion)
     {
-        if(direccion == 1){
-            PulsoDe = false;
-            PulsoIz = true;
-        }
-        else if (direccion == 2)
-        {
-            PulsoDe = false;
-            PulsoIz = false;
-        }
-        else if (direccion == 3)
-        {
-            PulsoIz = false;
-            PulsoDe = true;
-        }
+        PulsoDe = direccion == 1 ? false : (direccion == 2 ? false : true);
+        PulsoIz = direccion == 1 ? true : false;
+
+        //TODAS ESAS LINEAS ME LAS HE FUMADO POR ESTAS DOS DE ARRIBA ^^ [BORRAR lo de ABAJO]
+        //if (direccion == 1){
+        //    PulsoDe = false;
+        //    PulsoIz = true;
+        //}
+        //else if (direccion == 2)
+        //{
+        //    PulsoDe = false;
+        //    PulsoIz = false;
+        //}
+        //else if (direccion == 3)
+        //{
+        //    PulsoIz = false;
+        //    PulsoDe = true;
+        //}
       
     }
-
-    //Salto del Jugador:
-    //Funcion de Salto que se activarán al pulsar encima del objeto Canvas llamado "AreaSaltar" con un objeto "Event Trigger"
+    /// <summary>
+    /// Funcion de Salto que se activarán al pulsar encima del objeto Canvas llamado "AreaSaltar" con un objeto "Event Trigger"
+    /// </summary>
     public void SaltarJugador()
     {
-        cuerpoJugador.velocity = new Vector2(cuerpoJugador.velocity.x, fuerzaSalto);
-        animatorJugador.SetFloat("vSpeed", Mathf.Abs(cuerpoJugador.velocity.y));
+        CuerpoJugador.velocity = new Vector2(CuerpoJugador.velocity.x, fuerzaSalto);
+        AnimatorJugador.SetFloat("vSpeed", Mathf.Abs(CuerpoJugador.velocity.y));
     }
 
+    /// <summary>
+    /// ¿QUE HACE?
+    /// </summary>
     public void DejarSaltar()
     {
-	    animatorJugador.SetFloat ("vSpeed", 0f);
+	    AnimatorJugador.SetFloat ("vSpeed", 0f);
     }
-
-    //Hacer Daño al Jugador:
-
+    
+    /// <summary>
+    /// ¿QUE HACE?
+    /// </summary>
+    /// <param name="daño"></param>
     public void BajarVida(float daño)
     {
         VidaJugador -= daño;
         BarraVida.fillAmount = VidaJugador;
     }
-
-
 }
