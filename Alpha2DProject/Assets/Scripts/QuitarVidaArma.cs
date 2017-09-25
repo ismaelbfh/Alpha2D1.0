@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class QuitarVidaArma : MonoBehaviour
 {
-     //Variables
-     public float DañoACausar;
-     public PlayerAndHUDController ScriptPlayer;
-     float contadorEliminar = 1.5f;
+    //Variables
+    private float contadorEliminar = 1.5f;
+
+    public float DañoACausar;
+    public PlayerAndHUDController ScriptPlayer;
+     
 
      void Awake()
      {

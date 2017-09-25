@@ -91,7 +91,7 @@ public class PlayerAndHUDController : MonoBehaviour {
         CuerpoJugador = Jugador.GetComponent<Rigidbody2D>(); //Cuerpo del jugador
         AnimatorJugador = Jugador.GetComponent<Animator>(); //Animador del jugador
         //HUD
-        BarraVida = GameObject.Find("BarraVida").GetComponent<Image>();
+        BarraVida = GameObject.FindGameObjectWithTag("RellenoVida").GetComponent<Image>();
 		TamañoX = Jugador.transform.localScale.x;
     }
 
