@@ -12,17 +12,17 @@ public class QuitarVidaArma : MonoBehaviour
     public float DañoACausar;
     public PlayerAndHUDController ScriptPlayer;
      
-
+	/// <summary>
+	/// Busca el objeto HUD y el script que maneja la HUD y al player.
+	/// </summary>
      void Awake()
      {
          ScriptPlayer = GameObject.Find("HUD").GetComponent<PlayerAndHUDController>();
      }
 
-     void Start()
-     {
-         //Inicialización:
-     }
-
+	/// <summary>
+	/// Cuando su trigger se encuentre con el jugador activará la función de bajar vida del mismo y destruirá el objeto en cuestión.
+	/// </summary>
      void OnTriggerEnter2D(Collider2D colision)
      {
          if (colision.tag == "Player")
@@ -32,13 +32,17 @@ public class QuitarVidaArma : MonoBehaviour
          }
      }
 
+	/// <summary>
+	/// Contador que elimina el objeto despúes de un tiempo definido anteriormente.
+	/// </summary>
      void Update()
      {
          if (contadorEliminar <= 0)
          {
              Destroy(this.gameObject);
          }
-         contadorEliminar -= Time.deltaTime;
+          contadorEliminar -= Time.deltaTime;
+        
      }
 
 
