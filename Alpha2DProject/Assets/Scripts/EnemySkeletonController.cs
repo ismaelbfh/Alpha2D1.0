@@ -40,8 +40,8 @@ public class EnemySkeletonController : MonoBehaviour {
     private bool _MirarHaciaIzquierda = true;
     private bool _JugadorEnPlataforma = false;
     private bool _VoltearCaminar;
-	//private Vector2 _PosicionJugador;
-	public Vector2 PosicionJugador;
+	private Vector2 _PosicionJugador; //--> Esto hemos cambiado a private 
+	//public Vector2 PosicionJugador;
 
     [SerializeField]  //De esta forma podemos depurar la private sin ser public ;)
     private bool _Caminar = false; 
@@ -233,19 +233,19 @@ public class EnemySkeletonController : MonoBehaviour {
         {
             _ImagenRendererEnemigo = value;
         }
-    /*
-	public Vector2 PosicionJugador
-	{
-		get
-		{
-			return _PosicionJugador;
-		}
-
-		set 
-		{
-			_PosicionJugador = value;
-		}	*/
 	}
+    public Vector2 PosicionJugador
+    {
+        get
+        {
+            return _PosicionJugador;
+        }
+
+        set
+        {
+            _PosicionJugador = value;
+        }
+    }
 
     private void Start()
     {

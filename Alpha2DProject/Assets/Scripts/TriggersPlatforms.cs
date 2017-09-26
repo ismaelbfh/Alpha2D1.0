@@ -28,8 +28,13 @@ public class TriggersPlatforms : MonoBehaviour {
             if (Colision.tag == "Player")
             {
                 controladorEsqueleto.JugadorEnPlataforma = true;
-                controladorEsqueleto.PosicionJugador.x = Colision.transform.position.x;
-                controladorEsqueleto.PosicionJugador.y = Colision.transform.position.y;
+
+                //NO PODEMOS ESTABLECER LA X e Y DE UN VALOR CONCRETO, SOLO ESTABLECER LA CONFIGURACION DE ESA VARIABLE,
+                //la variable PosicionJugador necesita que establezcan un Vector2 como minimo, para ello lo resumimos en:
+                controladorEsqueleto.PosicionJugador = Colision.transform.position;
+                //en vez de
+                //controladorEsqueleto.PosicionJugador.x = Colision.transform.position.x;
+                //controladorEsqueleto.PosicionJugador.y = Colision.transform.position.y;
             }
 		}//Si el collider esta activado como verificador de limite de caminar del enemigo y si es el enemigo que entra en el trigger del collider activa la función 
 		//de voltearse y le dice la posición del jugador cuando entro al collider.
@@ -56,8 +61,7 @@ public class TriggersPlatforms : MonoBehaviour {
             if (Colision.tag == "Player")
             {
                 controladorEsqueleto.JugadorEnPlataforma = false;
-                controladorEsqueleto.PosicionJugador.x = 0;
-                controladorEsqueleto.PosicionJugador.y = 0;
+                controladorEsqueleto.PosicionJugador = new Vector2(0, 0); //Establece un unico valor, no podemos sacar la x o la y, establece su tipo(en este caso Vector2)
                 controladorEsqueleto.VoltearCaminar = true;
             }
         }
