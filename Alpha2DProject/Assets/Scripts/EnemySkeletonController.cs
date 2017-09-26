@@ -23,11 +23,15 @@ public class EnemySkeletonController : MonoBehaviour {
     private bool _Saltar;
     private Rigidbody2D _cuerpoEnemigo;
     private Animator _animatorEnemigo;
+	private bool _EnSuelo;
+	private float _RadioDetectarSuelo = 0.07f;
 
     //publicas
     public float velocidadCaminar;
     public float fuerzaSalto;
     public float vida = 1.0f;
+	public Transform VerificadorSuelo; 
+	public LayerMask LayerSuelo;
     
     /// <summary>
     /// IA DEL ENEMIGO EN ESTE TRAMO
@@ -40,8 +44,7 @@ public class EnemySkeletonController : MonoBehaviour {
     private bool _MirarHaciaIzquierda = true;
     private bool _JugadorEnPlataforma = false;
     private bool _VoltearCaminar;
-	private Vector2 _PosicionJugador; //--> Esto hemos cambiado a private 
-	//public Vector2 PosicionJugador;
+	private Vector2 _PosicionJugador;
 
     [SerializeField]  //De esta forma podemos depurar la private sin ser public ;)
     private bool _Caminar = false; 
@@ -259,15 +262,14 @@ public class EnemySkeletonController : MonoBehaviour {
 		if (!MirarHaciaIzquierda) {
 			TransformEnemigo.localScale = new Vector3 (Enemigo.transform.localScale.x * -1,Enemigo.transform.localScale.y,0f);
 		}
+
     }
 
     /// <summary>
-    /// Método de Físicas. Se utiliza para mover al enemigo. Hacer que ataque y que salte.
+    /// Método de Físicas. Se utiliza para mover al enemigo. Hacer que ataque y salte.
     /// </summary>
     private void FixedUpdate()
     {
-        //HACER if en funcion del tipo de esqueletoestablezca un valor al boleano Caminar
-        Caminar = true; //tendras que cambiarlo como preferencia segun el tipo de esqueleto, recuerda condicionales en una linea con "? y :"
 
         //Caminar y Atacar:
         if (!JugadorEnPlataforma) // Si el jugador no esta en la plataforma no atacara y caminara o se mantendrá quieto:
@@ -323,13 +325,13 @@ public class EnemySkeletonController : MonoBehaviour {
 			if (PosicionJugador.x < this.transform.position.x)
             {
 				TransformEnemigo.localScale = new Vector3 (Mathf.Abs(Enemigo.transform.localScale.x),Enemigo.transform.localScale.y,0f);
-                PosicionadorArma.transform.localPosition = new Vector3(PosicionadorArma.transform.localPosition.x * (-1), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
+				PosicionadorArma.transform.localPosition = new Vector3(PosicionadorArma.transform.localPosition.x * (-1), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
 				MirarHaciaIzquierda = true;
 			}
-			else if(PosicionJugador.x < this.transform.position.x)
+			else if(PosicionJugador.x > this.transform.position.x)
             {
 				TransformEnemigo.localScale = new Vector3 (-Enemigo.transform.localScale.x,Enemigo.transform.localScale.y,0f);
-                PosicionadorArma.transform.localPosition = new Vector3(Mathf.Abs(PosicionadorArma.transform.localPosition.x), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
+				PosicionadorArma.transform.localPosition = new Vector3(Mathf.Abs(PosicionadorArma.transform.localPosition.x), PosicionadorArma.transform.localPosition.y,PosicionadorArma.transform.localPosition.z); 
 				MirarHaciaIzquierda = false;
             }
 
@@ -338,21 +340,20 @@ public class EnemySkeletonController : MonoBehaviour {
         if (isLanzarCuchillo)
         {
             isLanzarCuchillo = false;
-            Arma = Instantiate(Arma, PosicionadorArma.transform.position, Arma.transform.rotation, Enemigo.transform) as GameObject;
+			Arma = Instantiate(Arma, PosicionadorArma.transform.position, Arma.transform.rotation) as GameObject;
 			if (MirarHaciaIzquierda)
             {
-                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(-400, 0);
+                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(-100, 0);
             }
             else
             {
-                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(400, 0);
+                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(100, 0);
             }
             Arma.name = "Cuchillo1";
             Arma = ArmaGuardada;
         }
     }
-
-    //¿PARA QUE QUIERES ESTE METODO? Eliminar si no se usa y utilizar la propiedad get para dicho uso
+		
     public void LanzarCuchillo()
     {
         isLanzarCuchillo = true;
@@ -380,7 +381,7 @@ public class EnemySkeletonController : MonoBehaviour {
     /// </summary>
     private void SaltarEsqueleto()
     {
-        if (Saltar)
+        if (Saltar )
         {
             CuerpoEnemigo.velocity = new Vector3(0 /*Para que no se mueva mientras salta */, fuerzaSalto);
         }

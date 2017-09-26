@@ -13,11 +13,17 @@ public class PlayerAndHUDController : MonoBehaviour {
     private Rigidbody2D _cuerpoJugador;
     private Animator _animatorJugador;
     private Image _BarraVida;
+	private bool _EnSuelo;
+	private float _RadioDetectarSuelo = 0.1f;
+	private bool _Saltar;
+	private bool _EnAire;
 
     //PLAYER:
     public float velocidadJugador = 2f;
     public float fuerzaSalto;
     public float VidaJugador;
+	public Transform VerificadorSuelo; 
+	public LayerMask LayerSuelo;
     //HUD:
     public bool PulsoIz = false;
     public bool PulsoDe = false;
@@ -94,15 +100,20 @@ public class PlayerAndHUDController : MonoBehaviour {
         CuerpoJugador = Jugador.GetComponent<Rigidbody2D>(); //Cuerpo del jugador
         AnimatorJugador = Jugador.GetComponent<Animator>(); //Animador del jugador
         //HUD
-        BarraVida = GameObject.FindGameObjectWithTag("RellenoVida").GetComponent<Image>();
+        BarraVida = GameObject.Find("FondoVida").GetComponent<Image>();
 		TamañoX = Jugador.transform.localScale.x;
     }
 
 	/// <summary>
-	/// Método de fisicas, utilizado para hacer que el jugador camine.
+	/// Método de fisicas, utilizado para hacer que el jugador camine y que detecte si esta en el suelo o no.
 	/// </summary>
     private void FixedUpdate()
     {
+
+		//Verificar si esta tocando el suelo o no:
+
+		_EnSuelo = Physics2D.OverlapCircle (new Vector2(VerificadorSuelo.position.x,VerificadorSuelo.position.y), _RadioDetectarSuelo, LayerSuelo);
+
         AnimatorJugador.SetFloat("speed", Mathf.Abs(CuerpoJugador.velocity.x));
 
         if (PulsoDe) //Si hemos pulsado el boton de la derecha le cambiamos escala y le aplicamos una fuerza
@@ -115,6 +126,16 @@ public class PlayerAndHUDController : MonoBehaviour {
             CuerpoJugador.velocity = new Vector2(-velocidadJugador, CuerpoJugador.velocity.y);
 			Jugador.transform.localScale = new Vector3(-TamañoX, Jugador.transform.localScale.y, 0f);
         }
+
+		if (_Saltar && _EnSuelo) {
+			CuerpoJugador.velocity = new Vector2 (CuerpoJugador.velocity.x, fuerzaSalto);
+			AnimatorJugador.SetFloat ("vSpeed", Mathf.Abs (CuerpoJugador.velocity.y));
+			_EnAire = true;
+			_Saltar = false;
+		} else if(_EnSuelo && _EnAire) {
+			AnimatorJugador.SetFloat ("vSpeed", 0);
+			_EnAire = false;
+		}
     
     }
 
@@ -131,17 +152,25 @@ public class PlayerAndHUDController : MonoBehaviour {
     /// </summary>
     public void SaltarJugador()
     {
-        CuerpoJugador.velocity = new Vector2(CuerpoJugador.velocity.x, fuerzaSalto);
-        AnimatorJugador.SetFloat("vSpeed", Mathf.Abs(CuerpoJugador.velocity.y));
+		/*
+		if (_EnSuelo) {
+			CuerpoJugador.velocity = new Vector2 (CuerpoJugador.velocity.x, fuerzaSalto);
+			AnimatorJugador.SetFloat ("vSpeed", Mathf.Abs (CuerpoJugador.velocity.y));
+		}*/
+		_Saltar = true;
     }
 
     /// <summary>
     /// Hace que el jugador detenga la animación de salto. Esto hay que cambiarlo, lo hare cuando haga la función que verifique si esta o no en el suelo.
     /// </summary>
+ /*
     public void DejarSaltar()
-    {
-	    AnimatorJugador.SetFloat ("vSpeed", 0f);
-    }
+	{
+		//Verificar si esta tocando el suelo para desactivar la animación de salto:
+		if (_EnSuelo) {
+			AnimatorJugador.SetFloat ("vSpeed", 0);
+		}
+    }*/
     
     /// <summary>
     /// Función llamada desde los objetos o armas que causen daño al jugador, le restan la vida al mismo y bajan la barra.

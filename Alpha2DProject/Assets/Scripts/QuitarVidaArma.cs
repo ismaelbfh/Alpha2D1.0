@@ -10,7 +10,7 @@ public class QuitarVidaArma : MonoBehaviour
     private float contadorEliminar = 1.5f;
 
     public float DañoACausar;
-    public PlayerAndHUDController ScriptPlayer;
+	private PlayerAndHUDController ScriptPlayer;
      
 	/// <summary>
 	/// Busca el objeto HUD y el script que maneja la HUD y al player.
