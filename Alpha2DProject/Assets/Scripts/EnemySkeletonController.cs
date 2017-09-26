@@ -21,8 +21,8 @@ public class EnemySkeletonController : MonoBehaviour {
     private Image _ImagenRendererEnemigo;
     private bool _Voltear;
     private bool _Saltar;
-    private Rigidbody2D _cuerpoEnemigo; //para que las quieres publicas si las extraes desde codigo ¿?
-    private Animator _animatorEnemigo; //para que las quieres publicas si las extraes de codigo
+    private Rigidbody2D _cuerpoEnemigo;
+    private Animator _animatorEnemigo;
 
     //publicas
     public float velocidadCaminar;
@@ -40,12 +40,12 @@ public class EnemySkeletonController : MonoBehaviour {
     private bool _MirarHaciaIzquierda = true;
     private bool _JugadorEnPlataforma = false;
     private bool _VoltearCaminar;
+	//private Vector2 _PosicionJugador;
+	public Vector2 PosicionJugador;
 
     [SerializeField]  //De esta forma podemos depurar la private sin ser public ;)
     private bool _Caminar = false; 
 
-    //Mira a ver si son publicas o privadas, en ese caso ¡CAMBIAR!
-    public Vector2 posicionJugador;
     public GameObject Arma;
     public GameObject PosicionadorArma;
 
@@ -233,7 +233,19 @@ public class EnemySkeletonController : MonoBehaviour {
         {
             _ImagenRendererEnemigo = value;
         }
-    }
+    /*
+	public Vector2 PosicionJugador
+	{
+		get
+		{
+			return _PosicionJugador;
+		}
+
+		set 
+		{
+			_PosicionJugador = value;
+		}	*/
+	}
 
     private void Start()
     {
@@ -242,7 +254,7 @@ public class EnemySkeletonController : MonoBehaviour {
 		TransformEnemigo = Enemigo.transform;
         CuerpoEnemigo = Enemigo.GetComponent<Rigidbody2D>();
         AnimatorEnemigo = Enemigo.GetComponent<Animator>();
-        posicionJugador = new Vector2(0, 0);
+        PosicionJugador = new Vector2(0, 0);
         ArmaGuardada = Arma;
 		if (!MirarHaciaIzquierda) {
 			TransformEnemigo.localScale = new Vector3 (Enemigo.transform.localScale.x * -1,Enemigo.transform.localScale.y,0f);
@@ -250,8 +262,7 @@ public class EnemySkeletonController : MonoBehaviour {
     }
 
     /// <summary>
-    /// Debes comentar todos los metodos y su funcionamiento:
-    /// Por ejemplo: se activa desde el event trigger de x objeto y realiza x accion
+    /// Método de Físicas. Se utiliza para mover al enemigo. Hacer que ataque y que salte.
     /// </summary>
     private void FixedUpdate()
     {
@@ -306,16 +317,16 @@ public class EnemySkeletonController : MonoBehaviour {
         //Animación de Ataque:
         AnimatorEnemigo.SetBool("attack", true);
         //Voltear hacia la posición del jugador:
-        if (posicionJugador != (new Vector2(0, 0)))
+        if (PosicionJugador != (new Vector2(0, 0)))
         {
             //Verificar si esta de un lado u otro:
-			if (posicionJugador.x < this.transform.position.x)
+			if (PosicionJugador.x < this.transform.position.x)
             {
 				TransformEnemigo.localScale = new Vector3 (Mathf.Abs(Enemigo.transform.localScale.x),Enemigo.transform.localScale.y,0f);
                 PosicionadorArma.transform.localPosition = new Vector3(PosicionadorArma.transform.localPosition.x * (-1), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
 				MirarHaciaIzquierda = true;
 			}
-			else if(posicionJugador.x < this.transform.position.x)
+			else if(PosicionJugador.x < this.transform.position.x)
             {
 				TransformEnemigo.localScale = new Vector3 (-Enemigo.transform.localScale.x,Enemigo.transform.localScale.y,0f);
                 PosicionadorArma.transform.localPosition = new Vector3(Mathf.Abs(PosicionadorArma.transform.localPosition.x), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 

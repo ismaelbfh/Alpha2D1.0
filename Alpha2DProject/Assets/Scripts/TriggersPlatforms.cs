@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TriggersPlatforms : MonoBehaviour {
 
-    //Separa siempre privates de publics
-
     private EnemySkeletonController controladorEsqueleto;
     private int contador = 1;
 
@@ -18,20 +16,23 @@ public class TriggersPlatforms : MonoBehaviour {
     }
 
     /// <summary>
-    /// EXPLICAR CÓDIGO
+    /// Revisa las colisiones que haga la plataforma para de esta manera verificar si esta entrando el jugador y activar la funciòn atacar o si es el esqueleto para
+	/// activar la función de voltearse.
     /// </summary>
-    /// <param name="Colision"></param>
     private void OnTriggerEnter2D(Collider2D Colision)
     {
+		//Si el collider esta configurado para verificar si el player esta en la plataforma y el player entra en el collider activa la función de ataque del enemigo y 
+		//le da la posición del player cuando entró al collider.
         if (!EsEnemigo)
         {
             if (Colision.tag == "Player")
             {
                 controladorEsqueleto.JugadorEnPlataforma = true;
-                controladorEsqueleto.posicionJugador.x = Colision.transform.position.x;
-                controladorEsqueleto.posicionJugador.y = Colision.transform.position.y;
+                controladorEsqueleto.PosicionJugador.x = Colision.transform.position.x;
+                controladorEsqueleto.PosicionJugador.y = Colision.transform.position.y;
             }
-        }
+		}//Si el collider esta activado como verificador de limite de caminar del enemigo y si es el enemigo que entra en el trigger del collider activa la función 
+		//de voltearse y le dice la posición del jugador cuando entro al collider.
         else if (EsEnemigo)
         {
 
@@ -45,9 +46,9 @@ public class TriggersPlatforms : MonoBehaviour {
     }
 
     /// <summary>
-    /// EXPLICAR CODIGO
+    /// Verifica cuando el jugador sale del collider para poder desactivar la función de ataque del jugador, además le quita la posición dicha anteriormente y
+	/// le activa la función de voltearse.
     /// </summary>
-    /// <param name="Colision"></param>
     private void OnTriggerExit2D(Collider2D Colision)
     {
         if (!EsEnemigo)
@@ -55,8 +56,8 @@ public class TriggersPlatforms : MonoBehaviour {
             if (Colision.tag == "Player")
             {
                 controladorEsqueleto.JugadorEnPlataforma = false;
-                controladorEsqueleto.posicionJugador.x = 0;
-                controladorEsqueleto.posicionJugador.y = 0;
+                controladorEsqueleto.PosicionJugador.x = 0;
+                controladorEsqueleto.PosicionJugador.y = 0;
                 controladorEsqueleto.VoltearCaminar = true;
             }
         }
@@ -67,9 +68,8 @@ public class TriggersPlatforms : MonoBehaviour {
     }
 
     /// <summary>
-    /// EXPLICAR CODIGO
+    /// Activa la función de volteo del enemigo por si se queda trabado dentro del collider.
     /// </summary>
-    /// <param name="Colision"></param>
     private void OnTriggerStay2D(Collider2D Colision)
     {
         if (EsEnemigo)

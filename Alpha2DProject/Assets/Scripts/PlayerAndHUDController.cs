@@ -84,6 +84,9 @@ public class PlayerAndHUDController : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Inicialización de variables buscando sus respectivos objetos y componentes.
+	/// </summary>
     private void Start()
     {
         //Jugador:
@@ -95,6 +98,9 @@ public class PlayerAndHUDController : MonoBehaviour {
 		TamañoX = Jugador.transform.localScale.x;
     }
 
+	/// <summary>
+	/// Método de fisicas, utilizado para hacer que el jugador camine.
+	/// </summary>
     private void FixedUpdate()
     {
         AnimatorJugador.SetFloat("speed", Mathf.Abs(CuerpoJugador.velocity.x));
@@ -115,28 +121,10 @@ public class PlayerAndHUDController : MonoBehaviour {
     /// Funcion para activar/desactivar movimiento --> Se activan mediante un objeto "Event Trigger" en los Canvas de movimiento (BotonMovimientoIz y BotonMovimientoDe)
     /// 1 es Izquierda, 2 es detenido y 3 es derecha.
     /// </summary>
-    /// <param name="direccion"></param>
     public void ActivarDesactivarMovimiento(int direccion)
     {
         PulsoDe = direccion == 1 ? false : (direccion == 2 ? false : true);
-        PulsoIz = direccion == 1 ? true : false;
-
-        //TODAS ESAS LINEAS ME LAS HE FUMADO POR ESTAS DOS DE ARRIBA ^^ [BORRAR lo de ABAJO]
-        //if (direccion == 1){
-        //    PulsoDe = false;
-        //    PulsoIz = true;
-        //}
-        //else if (direccion == 2)
-        //{
-        //    PulsoDe = false;
-        //    PulsoIz = false;
-        //}
-        //else if (direccion == 3)
-        //{
-        //    PulsoIz = false;
-        //    PulsoDe = true;
-        //}
-      
+        PulsoIz = direccion == 1 ? true : false;   
     }
     /// <summary>
     /// Funcion de Salto que se activarán al pulsar encima del objeto Canvas llamado "AreaSaltar" con un objeto "Event Trigger"
@@ -148,7 +136,7 @@ public class PlayerAndHUDController : MonoBehaviour {
     }
 
     /// <summary>
-    /// ¿QUE HACE?
+    /// Hace que el jugador detenga la animación de salto. Esto hay que cambiarlo, lo hare cuando haga la función que verifique si esta o no en el suelo.
     /// </summary>
     public void DejarSaltar()
     {
@@ -156,9 +144,8 @@ public class PlayerAndHUDController : MonoBehaviour {
     }
     
     /// <summary>
-    /// ¿QUE HACE?
+    /// Función llamada desde los objetos o armas que causen daño al jugador, le restan la vida al mismo y bajan la barra.
     /// </summary>
-    /// <param name="daño"></param>
     public void BajarVida(float daño)
     {
         VidaJugador -= daño;
