@@ -27,14 +27,21 @@ public class TriggersPlatforms : MonoBehaviour {
         {
             if (Colision.tag == "Player")
             {
+				
                 controladorEsqueleto.JugadorEnPlataforma = true;
-
-                //NO PODEMOS ESTABLECER LA X e Y DE UN VALOR CONCRETO, SOLO ESTABLECER LA CONFIGURACION DE ESA VARIABLE,
-                //la variable PosicionJugador necesita que establezcan un Vector2 como minimo, para ello lo resumimos en:
-                controladorEsqueleto.PosicionJugador = Colision.transform.position;
-                //en vez de
-                //controladorEsqueleto.PosicionJugador.x = Colision.transform.position.x;
-                //controladorEsqueleto.PosicionJugador.y = Colision.transform.position.y;
+                //controladorEsqueleto.PosicionJugador = Colision.transform.position;
+				//Voltear hacia la posición del esqueleto 1 vez:
+				if (Colision.transform.position.x < EsqueletoAsociado.transform.position.x) {
+					EsqueletoAsociado.transform.localScale = new Vector3 (Mathf.Abs(EsqueletoAsociado.transform.localScale.x),EsqueletoAsociado.transform.localScale.y,0);
+					//controladorEsqueleto.PosicionadorArma.transform.localPosition = new Vector3 (-EsqueletoAsociado.transform.localPosition.x,EsqueletoAsociado.transform.localPosition.y,EsqueletoAsociado.transform.localPosition.z);
+					controladorEsqueleto.PosicionadorArma.transform.localScale = new Vector3(-1.05f,EsqueletoAsociado.transform.localPosition.y,EsqueletoAsociado.transform.localPosition.z);
+					controladorEsqueleto.MirarHaciaIzquierda = true;
+				} else if (Colision.transform.position.x > EsqueletoAsociado.transform.position.x) {
+					EsqueletoAsociado.transform.localScale = new Vector3 ((EsqueletoAsociado.transform.localScale.x) * -1,EsqueletoAsociado.transform.localScale.y,0);
+					//controladorEsqueleto.PosicionadorArma.transform.localPosition = new Vector3 (Mathf.Abs(EsqueletoAsociado.transform.localPosition.x),EsqueletoAsociado.transform.localPosition.y,EsqueletoAsociado.transform.localPosition.z);
+					controladorEsqueleto.PosicionadorArma.transform.localScale = new Vector3(1.05f,EsqueletoAsociado.transform.localPosition.y,EsqueletoAsociado.transform.localPosition.z);
+					controladorEsqueleto.MirarHaciaIzquierda = false;
+				}
             }
 		}//Si el collider esta activado como verificador de limite de caminar del enemigo y si es el enemigo que entra en el trigger del collider activa la función 
 		//de voltearse y le dice la posición del jugador cuando entro al collider.

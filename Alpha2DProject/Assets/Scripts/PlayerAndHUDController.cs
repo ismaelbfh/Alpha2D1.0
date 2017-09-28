@@ -16,7 +16,7 @@ public class PlayerAndHUDController : MonoBehaviour {
 	private bool _EnSuelo;
 	private float _RadioDetectarSuelo = 0.1f;
 	private bool _Saltar;
-	private bool _EnAire;
+	private int _ContadorSalto = 0;
 
     //PLAYER:
     public float velocidadJugador = 2f;
@@ -113,6 +113,9 @@ public class PlayerAndHUDController : MonoBehaviour {
 		//Verificar si esta tocando el suelo o no:
 
 		_EnSuelo = Physics2D.OverlapCircle (new Vector2(VerificadorSuelo.position.x,VerificadorSuelo.position.y), _RadioDetectarSuelo, LayerSuelo);
+		if (_EnSuelo) {
+			_ContadorSalto = 0;
+		}
 
         AnimatorJugador.SetFloat("speed", Mathf.Abs(CuerpoJugador.velocity.x));
 
@@ -127,14 +130,12 @@ public class PlayerAndHUDController : MonoBehaviour {
 			Jugador.transform.localScale = new Vector3(-TamañoX, Jugador.transform.localScale.y, 0f);
         }
 
-		if (_Saltar && _EnSuelo) {
+		if (_Saltar && (_EnSuelo || _ContadorSalto <= 1)) {
 			CuerpoJugador.velocity = new Vector2 (CuerpoJugador.velocity.x, fuerzaSalto);
 			AnimatorJugador.SetFloat ("vSpeed", Mathf.Abs (CuerpoJugador.velocity.y));
-			_EnAire = true;
 			_Saltar = false;
-		} else if(_EnSuelo && _EnAire) {
+		} else if(_EnSuelo) {
 			AnimatorJugador.SetFloat ("vSpeed", 0);
-			_EnAire = false;
 		}
     
     }
@@ -152,25 +153,10 @@ public class PlayerAndHUDController : MonoBehaviour {
     /// </summary>
     public void SaltarJugador()
     {
-		/*
-		if (_EnSuelo) {
-			CuerpoJugador.velocity = new Vector2 (CuerpoJugador.velocity.x, fuerzaSalto);
-			AnimatorJugador.SetFloat ("vSpeed", Mathf.Abs (CuerpoJugador.velocity.y));
-		}*/
 		_Saltar = true;
+		_ContadorSalto++;
     }
-
-    /// <summary>
-    /// Hace que el jugador detenga la animación de salto. Esto hay que cambiarlo, lo hare cuando haga la función que verifique si esta o no en el suelo.
-    /// </summary>
- /*
-    public void DejarSaltar()
-	{
-		//Verificar si esta tocando el suelo para desactivar la animación de salto:
-		if (_EnSuelo) {
-			AnimatorJugador.SetFloat ("vSpeed", 0);
-		}
-    }*/
+		
     
     /// <summary>
     /// Función llamada desde los objetos o armas que causen daño al jugador, le restan la vida al mismo y bajan la barra.

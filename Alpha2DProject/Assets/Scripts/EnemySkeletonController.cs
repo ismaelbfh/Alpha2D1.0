@@ -283,7 +283,7 @@ public class EnemySkeletonController : MonoBehaviour {
         }
         else //En cambio si el jugador esta en la plataforma no caminara y atacara:
         {
-            Atacar();
+				Atacar ();
         }
 
         //Voltear al Enemigo
@@ -316,43 +316,23 @@ public class EnemySkeletonController : MonoBehaviour {
     /// </summary>
     private void Atacar()
     {
-        //Animación de Ataque:
-        AnimatorEnemigo.SetBool("attack", true);
-        //Voltear hacia la posición del jugador:
-        if (PosicionJugador != (new Vector2(0, 0)))
-        {
-            //Verificar si esta de un lado u otro:
-			if (PosicionJugador.x < this.transform.position.x)
-            {
-				TransformEnemigo.localScale = new Vector3 (Mathf.Abs(Enemigo.transform.localScale.x),Enemigo.transform.localScale.y,0f);
-				PosicionadorArma.transform.localPosition = new Vector3(PosicionadorArma.transform.localPosition.x * (-1), PosicionadorArma.transform.localPosition.y, PosicionadorArma.transform.localPosition.z); 
-				MirarHaciaIzquierda = true;
+		//Animación de Ataque:
+		AnimatorEnemigo.SetBool ("attack", true);
+			//Crear el sprite del cuchillo en el segundo:
+			if (isLanzarCuchillo) {
+				isLanzarCuchillo = false;
+				Arma = Instantiate (Arma,PosicionadorArma.transform.localPosition,PosicionadorArma.transform.rotation, TransformEnemigo) as GameObject;
+				//Arma.transform.localPosition = PosicionadorArma.transform.localPosition;
+				if (MirarHaciaIzquierda) {
+					Arma.GetComponent<Rigidbody2D> ().velocity = new Vector2 (-100, 0);
+				} else {
+					Arma.GetComponent<Rigidbody2D> ().velocity = new Vector2 (100, 0);
+				}
+				Arma.name = "Cuchillo1";
+				Arma = ArmaGuardada;
 			}
-			else if(PosicionJugador.x > this.transform.position.x)
-            {
-				TransformEnemigo.localScale = new Vector3 (-Enemigo.transform.localScale.x,Enemigo.transform.localScale.y,0f);
-				PosicionadorArma.transform.localPosition = new Vector3(Mathf.Abs(PosicionadorArma.transform.localPosition.x), PosicionadorArma.transform.localPosition.y,PosicionadorArma.transform.localPosition.z); 
-				MirarHaciaIzquierda = false;
-            }
-
-        }
-        //Crear el sprite del cuchillo en el segundo:
-        if (isLanzarCuchillo)
-        {
-            isLanzarCuchillo = false;
-			Arma = Instantiate(Arma, PosicionadorArma.transform.position, Arma.transform.rotation) as GameObject;
-			if (MirarHaciaIzquierda)
-            {
-                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(-100, 0);
-            }
-            else
-            {
-                Arma.GetComponent<Rigidbody2D>().velocity = new Vector2(100, 0);
-            }
-            Arma.name = "Cuchillo1";
-            Arma = ArmaGuardada;
-        }
     }
+
 		
     public void LanzarCuchillo()
     {
