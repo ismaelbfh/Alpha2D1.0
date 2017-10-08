@@ -25,7 +25,7 @@ public class QuitarVidaArma : MonoBehaviour
 	/// </summary>
      void OnTriggerEnter2D(Collider2D colision)
      {
-         if (colision.tag == "Player")
+		if (colision.tag == "Player")
          {
              ScriptPlayer.BajarVida(DañoACausar);
              Destroy(this.gameObject);
@@ -37,12 +37,11 @@ public class QuitarVidaArma : MonoBehaviour
 	/// </summary>
      void Update()
      {
-         if (contadorEliminar <= 0)
+		if (contadorEliminar <= 0)
          {
              Destroy(this.gameObject);
          }
           contadorEliminar -= Time.deltaTime;
-        
      }
 
 

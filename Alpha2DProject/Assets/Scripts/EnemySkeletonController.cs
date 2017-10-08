@@ -321,12 +321,12 @@ public class EnemySkeletonController : MonoBehaviour {
 			//Crear el sprite del cuchillo en el segundo:
 			if (isLanzarCuchillo) {
 				isLanzarCuchillo = false;
-				Arma = Instantiate (Arma,PosicionadorArma.transform.localPosition,PosicionadorArma.transform.rotation, TransformEnemigo) as GameObject;
-				//Arma.transform.localPosition = PosicionadorArma.transform.localPosition;
+				Arma = (GameObject) Instantiate (Arma, PosicionadorArma.transform.position, PosicionadorArma.transform.rotation, TransformEnemigo);
+				Arma.transform.localPosition = PosicionadorArma.transform.localPosition;
 				if (MirarHaciaIzquierda) {
-					Arma.GetComponent<Rigidbody2D> ().velocity = new Vector2 (-100, 0);
+					Arma.GetComponent<Rigidbody2D> ().velocity = new Vector2 (-10, 0);
 				} else {
-					Arma.GetComponent<Rigidbody2D> ().velocity = new Vector2 (100, 0);
+					Arma.GetComponent<Rigidbody2D> ().velocity = new Vector2 (10, 0);
 				}
 				Arma.name = "Cuchillo1";
 				Arma = ArmaGuardada;
