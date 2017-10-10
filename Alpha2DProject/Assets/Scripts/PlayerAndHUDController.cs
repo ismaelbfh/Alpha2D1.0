@@ -22,6 +22,8 @@ public class PlayerAndHUDController : MonoBehaviour {
     public float velocidadJugador = 2f;
     public float fuerzaSalto;
     public float VidaJugador;
+	public GameObject posicionadorProyectil;
+	public GameObject PrefabCentella;
 	public Transform VerificadorSuelo; 
 	public LayerMask LayerSuelo;
     //HUD:
@@ -176,13 +178,27 @@ public class PlayerAndHUDController : MonoBehaviour {
         BarraVida.fillAmount = VidaJugador;
     }
 
+	/// <summary>
+	/// Agrega la cantidad de vidas indicada al player, la activa el script "AddLifeAndPlates" de los objetos vida y chapas.
+	/// </summary>
 	public void AgregarVida(int cantidad){
 		_VidasJugador += cantidad;
 		_TextoVidas.text = _VidasJugador.ToString();
 	}
-
+	/// <summary>
+	/// /// Agrega la cantidad de chapas indicada al player, la activa el script "AddLifeAndPlates" de los objetos vida y chapas
+	/// </summary>
 	public void AgregarChapas(int cantidad){
 		_ChapasJugador += cantidad;
 		_TextoChapas.text = _ChapasJugador + "/" + ChapasMinimasARecoger;
+	}
+
+	public void AtacarPlayer(int numeroAnimacion, bool Cuchillo){
+		if (!Cuchillo) {
+			AnimatorJugador.SetInteger ("nAttack", numeroAnimacion);
+		} else {
+			GameObject Centella = Instantiate (PrefabCentella,posicionadorProyectil.transform.position,posicionadorProyectil.transform.rotation,this.gameObject.transform);
+			Centella.GetComponent<Rigidbody2D>().AddForce(new Vector2(10,0),ForceMode2D.Force);
+		}
 	}
 }
