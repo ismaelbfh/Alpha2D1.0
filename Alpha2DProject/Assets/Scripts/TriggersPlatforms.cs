@@ -29,18 +29,13 @@ public class TriggersPlatforms : MonoBehaviour {
             {
 				
                 controladorEsqueleto.JugadorEnPlataforma = true;
-                //controladorEsqueleto.PosicionJugador = Colision.transform.position;
 				//Voltear hacia la posición del esqueleto 1 vez:
 				if (Colision.transform.position.x < EsqueletoAsociado.transform.position.x) {
-					EsqueletoAsociado.transform.localScale = new Vector3 (Mathf.Abs(EsqueletoAsociado.transform.localScale.x),EsqueletoAsociado.transform.localScale.y,0);
-					//controladorEsqueleto.PosicionadorArma.transform.localPosition = new Vector3 (-EsqueletoAsociado.transform.localPosition.x,EsqueletoAsociado.transform.localPosition.y,EsqueletoAsociado.transform.localPosition.z);
-					controladorEsqueleto.PosicionadorArma.transform.localScale = new Vector3(-1.05f,EsqueletoAsociado.transform.localPosition.y,EsqueletoAsociado.transform.localPosition.z);
 					controladorEsqueleto.MirarHaciaIzquierda = true;
+					controladorEsqueleto.GetComponent<SpriteRenderer>().flipX = false;
 				} else if (Colision.transform.position.x > EsqueletoAsociado.transform.position.x) {
-					EsqueletoAsociado.transform.localScale = new Vector3 ((EsqueletoAsociado.transform.localScale.x) * -1,EsqueletoAsociado.transform.localScale.y,0);
-					//controladorEsqueleto.PosicionadorArma.transform.localPosition = new Vector3 (Mathf.Abs(EsqueletoAsociado.transform.localPosition.x),EsqueletoAsociado.transform.localPosition.y,EsqueletoAsociado.transform.localPosition.z);
-					controladorEsqueleto.PosicionadorArma.transform.localScale = new Vector3(1.05f,EsqueletoAsociado.transform.localPosition.y,EsqueletoAsociado.transform.localPosition.z);
 					controladorEsqueleto.MirarHaciaIzquierda = false;
+					controladorEsqueleto.GetComponent<SpriteRenderer>().flipX = true;
 				}
             }
 		}//Si el collider esta activado como verificador de limite de caminar del enemigo y si es el enemigo que entra en el trigger del collider activa la función 
@@ -68,7 +63,7 @@ public class TriggersPlatforms : MonoBehaviour {
             if (Colision.tag == "Player")
             {
                 controladorEsqueleto.JugadorEnPlataforma = false;
-                controladorEsqueleto.PosicionJugador = new Vector2(0, 0); //Establece un unico valor, no podemos sacar la x o la y, establece su tipo(en este caso Vector2)
+                controladorEsqueleto.PosicionJugador = new Vector2(0, 0);
                 controladorEsqueleto.VoltearCaminar = true;
             }
         }

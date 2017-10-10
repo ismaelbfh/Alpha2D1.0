@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerAndHUDController : MonoBehaviour {
 
-    //TODO: EXPLICA MEJOR LOS COMENTARIOS DE LOS METODOS
-
     //Variables del Jugador:
     private GameObject _Jugador;
     private float _TamañoX;
@@ -17,6 +15,8 @@ public class PlayerAndHUDController : MonoBehaviour {
 	private float _RadioDetectarSuelo = 0.1f;
 	private bool _Saltar;
 	private int _ContadorSalto = 0;
+	private int _ChapasJugador;
+	private int _VidasJugador;
 
     //PLAYER:
     public float velocidadJugador = 2f;
@@ -27,6 +27,11 @@ public class PlayerAndHUDController : MonoBehaviour {
     //HUD:
     public bool PulsoIz = false;
     public bool PulsoDe = false;
+
+	private Text _TextoChapas;
+	private Text _TextoVidas;
+	//Variables Generales del Nivel:
+	public int ChapasMinimasARecoger;
 
     //GETTERS Y SETTERS:
     public GameObject Jugador
@@ -102,6 +107,10 @@ public class PlayerAndHUDController : MonoBehaviour {
         //HUD
         BarraVida = GameObject.Find("FondoVida").GetComponent<Image>();
 		TamañoX = Jugador.transform.localScale.x;
+		_TextoChapas = GameObject.Find ("TextoChapas").GetComponent<Text> ();
+		_TextoVidas = GameObject.Find ("TextoVidas").GetComponent<Text> ();
+		_TextoChapas.text = "0/" + ChapasMinimasARecoger;
+		//_TextoVidas.text = Variable global que contenga las vidas del jugador.
     }
 
 	/// <summary>
@@ -166,4 +175,14 @@ public class PlayerAndHUDController : MonoBehaviour {
         VidaJugador -= daño;
         BarraVida.fillAmount = VidaJugador;
     }
+
+	public void AgregarVida(int cantidad){
+		_VidasJugador += cantidad;
+		_TextoVidas.text = _VidasJugador.ToString();
+	}
+
+	public void AgregarChapas(int cantidad){
+		_ChapasJugador += cantidad;
+		_TextoChapas.text = _ChapasJugador + "/" + ChapasMinimasARecoger;
+	}
 }

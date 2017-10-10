@@ -5,15 +5,6 @@ using UnityEngine.UI;
 
 public class EnemySkeletonController : MonoBehaviour {
 
-
-    //TODO: NO DEBES HACER TANTAS VARIABLES PUBLICAS, ESO NOS RALENTIZA EL FUTURO MANTENIMIENTO y LIA AL QUE SE METE CON EL CODIGO PORQUE NO SABE SI INTERACTUARA DESDE EL EXTERIOR O NO
-
-    //Variables tipo "public" -> para cambiar en inspector desde el modo grafico en Unity (se usan para velocidad, vida, etc.)
-    //Variables tipo "private" -> Es lo mismo que no poner nada delante, y serán las que no cambies desde el inspector (boleanos controlables desde script...)
-    // Si quieres simular una public para depurar a la vez usa:
-    //                 Variables tipo "[SerializeField] private" -> Se usaran las que se cambien desde script igual que las privadas pero si en algun momento necesitamos depurarlo y verlo en el inspector se usa el "[SerializeField]" encima del mismo
-
-
     //Variables del Enemigo:
     private GameObject _Enemigo;
     private Transform _transformEnemigo;
@@ -23,15 +14,12 @@ public class EnemySkeletonController : MonoBehaviour {
     private bool _Saltar;
     private Rigidbody2D _cuerpoEnemigo;
     private Animator _animatorEnemigo;
-	private bool _EnSuelo;
-	private float _RadioDetectarSuelo = 0.07f;
+
 
     //publicas
     public float velocidadCaminar;
     public float fuerzaSalto;
     public float vida = 1.0f;
-	public Transform VerificadorSuelo; 
-	public LayerMask LayerSuelo;
     
     /// <summary>
     /// IA DEL ENEMIGO EN ESTE TRAMO
@@ -258,11 +246,7 @@ public class EnemySkeletonController : MonoBehaviour {
         CuerpoEnemigo = Enemigo.GetComponent<Rigidbody2D>();
         AnimatorEnemigo = Enemigo.GetComponent<Animator>();
         PosicionJugador = new Vector2(0, 0);
-        ArmaGuardada = Arma;
-		if (!MirarHaciaIzquierda) {
-			TransformEnemigo.localScale = new Vector3 (Enemigo.transform.localScale.x * -1,Enemigo.transform.localScale.y,0f);
-		}
-
+		ArmaGuardada = Arma;
     }
 
     /// <summary>
@@ -270,6 +254,16 @@ public class EnemySkeletonController : MonoBehaviour {
     /// </summary>
     private void FixedUpdate()
     {
+
+		if (Enemigo.GetComponent<SpriteRenderer> ().flipX) {//Viendo hacia la derecha:
+			velocidadCaminar = Mathf.Abs (velocidadCaminar);
+			PosicionadorArma.transform.localPosition = new Vector3 (Mathf.Abs(PosicionadorArma.transform.localPosition.x),PosicionadorArma.transform.localPosition.y,PosicionadorArma.transform.localPosition.z);
+		} else {//Viendo hacia la izquierda:
+			velocidadCaminar = velocidadCaminar == Mathf.Abs (velocidadCaminar) ? velocidadCaminar = velocidadCaminar * -1 : velocidadCaminar;
+			if (PosicionadorArma.transform.localPosition.x == Mathf.Abs (PosicionadorArma.transform.localPosition.x)) {
+				PosicionadorArma.transform.localPosition = new Vector3 (PosicionadorArma.transform.localPosition.x * -1,PosicionadorArma.transform.localPosition.y,PosicionadorArma.transform.localPosition.z);
+			}
+		}
 
         //Caminar y Atacar:
         if (!JugadorEnPlataforma) // Si el jugador no esta en la plataforma no atacara y caminara o se mantendrá quieto:
@@ -289,13 +283,7 @@ public class EnemySkeletonController : MonoBehaviour {
         //Voltear al Enemigo
         if (Voltear)
         {
-			TransformEnemigo.localScale = new Vector3 (Enemigo.transform.localScale.x * -1,Enemigo.transform.localScale.y,0f);
-			velocidadCaminar *= -1;
-			if (TransformEnemigo.localScale.x == Mathf.Abs (TransformEnemigo.localScale.x)) {
-				MirarHaciaIzquierda = true;
-			} else {
-				MirarHaciaIzquierda = false;
-			}
+			Enemigo.GetComponent<SpriteRenderer> ().flipX = Enemigo.GetComponent<SpriteRenderer> ().flipX ? false : true;
 			Voltear = false;
         }
 
@@ -311,8 +299,8 @@ public class EnemySkeletonController : MonoBehaviour {
     }
 
     /// <summary>
-    /// Debes comentar todos los metodos y su funcionamiento:
-    /// Por ejemplo: se activa desde el event trigger de x objeto y realiza x accion
+	/// Activa la Función de Ataque del enemigo, activandole su animación y verificando si se debe lanzar el cuchillo (Que se activa solo cuando el animation event lo indica en
+	/// el método de LanzarCuchillo)
     /// </summary>
     private void Atacar()
     {
@@ -333,31 +321,24 @@ public class EnemySkeletonController : MonoBehaviour {
 			}
     }
 
-		
+	/// <summary>
+	/// Activa el Lanzar Cuchillo para que se lance el cuchillo en su respectivo tiempo y no siempre.
+	/// </summary>
     public void LanzarCuchillo()
     {
         isLanzarCuchillo = true;
     }
 
     /// <summary>
-    /// Debes comentar todos los metodos y su funcionamiento:
-    /// Por ejemplo: se activa desde el event trigger de x objeto y realiza x accion
+	/// Hace que el enemigo deje de atacar quitandole la animación. Se activa cuando el player sale de la plataforma (Se lo indica el triggersPlatforms.cs).
     /// </summary>
     private void DejarAtacar()
     {
         AnimatorEnemigo.SetBool("attack", false);
-		if (Mathf.Abs (TransformEnemigo.localScale.x) == TransformEnemigo.localScale.x && Mathf.Abs (velocidadCaminar) == velocidadCaminar) {
-			velocidadCaminar = -velocidadCaminar;
-			MirarHaciaIzquierda = true;
-		} else if (Mathf.Abs (TransformEnemigo.localScale.x) != TransformEnemigo.localScale.x && Mathf.Abs (velocidadCaminar) != velocidadCaminar) {
-			velocidadCaminar = Mathf.Abs(velocidadCaminar);
-			MirarHaciaIzquierda = false;
-		}
     }
 
     /// <summary>
-    /// Debes comentar todos los metodos y su funcionamiento:
-    /// Por ejemplo: se activa desde el event trigger de x objeto y realiza x accion
+    /// Hace que el esqueleto Salte. No esta completo.
     /// </summary>
     private void SaltarEsqueleto()
     {
@@ -368,8 +349,7 @@ public class EnemySkeletonController : MonoBehaviour {
     }
 
     /// <summary>
-    /// Debes comentar todos los metodos y su funcionamiento:
-    /// Por ejemplo: se activa desde el event trigger de x objeto y realiza x accion
+	/// Hace que el esqueleto deje de hacer la animación de salto y le va quitando velocidad.
     /// </summary>
     private void DejarSaltar()
     {
