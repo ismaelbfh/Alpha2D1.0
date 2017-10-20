@@ -133,12 +133,14 @@ public class PlayerAndHUDController : MonoBehaviour {
         if (PulsoDe) //Si hemos pulsado el boton de la derecha le cambiamos escala y le aplicamos una fuerza
         {
             CuerpoJugador.velocity = new Vector2(velocidadJugador, CuerpoJugador.velocity.y);
-			Jugador.transform.localScale = new Vector3(TamañoX, Jugador.transform.localScale.y, 0f);
+			//Jugador.transform.localScale = new Vector3(TamañoX, Jugador.transform.localScale.y, 0f);
+			Jugador.GetComponent<SpriteRenderer>().flipX = false;
         }
         else if (PulsoIz) //Si pulsamos el de la izquierda se lanzara esto
         {
             CuerpoJugador.velocity = new Vector2(-velocidadJugador, CuerpoJugador.velocity.y);
-			Jugador.transform.localScale = new Vector3(-TamañoX, Jugador.transform.localScale.y, 0f);
+			//Jugador.transform.localScale = new Vector3(-TamañoX, Jugador.transform.localScale.y, 0f);
+			Jugador.GetComponent<SpriteRenderer>().flipX = true;
         }
 
 		if (_Saltar && (_EnSuelo || _ContadorSalto <= 1)) {
@@ -194,11 +196,26 @@ public class PlayerAndHUDController : MonoBehaviour {
 	}
 
 	public void AtacarPlayer(int numeroAnimacion, bool Cuchillo){
+
 		if (!Cuchillo) {
 			AnimatorJugador.SetInteger ("nAttack", numeroAnimacion);
 		} else {
-			GameObject Centella = Instantiate (PrefabCentella,posicionadorProyectil.transform.position,posicionadorProyectil.transform.rotation,this.gameObject.transform);
-			Centella.GetComponent<Rigidbody2D>().AddForce(new Vector2(10,0),ForceMode2D.Force);
+/*			float PosX = posicionadorProyectil.transform.position.x;
+			float PosY = posicionadorProyectil.transform.position.y;
+			float Posz = posicionadorProyectil.transform.position.z;*/
+
+			if (Jugador.GetComponent<SpriteRenderer> ().flipX) {
+				//posicionadorProyectil.transform.position = Mathf.Abs (PosX) == PosX ? new Vector3 (-PosX,PosY,Posz): posicionadorProyectil.transform.position;
+				posicionadorProyectil.transform.localPosition = new Vector3(-0.8990002f,posicionadorProyectil.transform.localPosition.y,posicionadorProyectil.transform.localPosition.z);
+				GameObject Centella = Instantiate (PrefabCentella,posicionadorProyectil.transform.position,posicionadorProyectil.transform.rotation,this.gameObject.transform);
+				Centella.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (-10, 0), ForceMode2D.Impulse);
+			} else {
+				posicionadorProyectil.transform.localPosition = new Vector3(0.8990002f,posicionadorProyectil.transform.localPosition.y,posicionadorProyectil.transform.localPosition.z);
+				GameObject Centella = Instantiate (PrefabCentella,posicionadorProyectil.transform.position,posicionadorProyectil.transform.rotation,this.gameObject.transform);
+				Centella.GetComponent<Rigidbody2D> ().AddForce (new Vector2 (10, 0), ForceMode2D.Impulse);
+			}
+
+
 		}
 	}
 }

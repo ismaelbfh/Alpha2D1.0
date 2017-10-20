@@ -10,6 +10,7 @@ public class QuitarVidaArma : MonoBehaviour
     private float contadorEliminar = 1.5f;
 
     public float DañoACausar;
+	public bool DañarAPlayer;
 	private PlayerAndHUDController ScriptPlayer;
      
 	/// <summary>
@@ -25,11 +26,16 @@ public class QuitarVidaArma : MonoBehaviour
 	/// </summary>
      void OnTriggerEnter2D(Collider2D colision)
      {
-		if (colision.tag == "Player")
+		if (colision.tag == "Player" && DañarAPlayer)
          {
              ScriptPlayer.BajarVida(DañoACausar);
              Destroy(this.gameObject);
          }
+
+		if (colision.tag == "Enemy" && !DañarAPlayer) {
+			colision.GetComponent<EnemySkeletonController>().BajarVida(DañoACausar);
+			Destroy(this.gameObject);
+		}
      }
 
 	/// <summary>

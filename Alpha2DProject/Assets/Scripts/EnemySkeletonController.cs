@@ -19,7 +19,7 @@ public class EnemySkeletonController : MonoBehaviour {
     //publicas
     public float velocidadCaminar;
     public float fuerzaSalto;
-    public float vida = 1.0f;
+	public float _VidaEnemigo = 1;
     
     /// <summary>
     /// IA DEL ENEMIGO EN ESTE TRAMO
@@ -356,6 +356,14 @@ public class EnemySkeletonController : MonoBehaviour {
         Saltar = false;
 		AnimatorEnemigo.SetFloat("vspeed", CuerpoEnemigo.velocity.y);
     }
+
+
+	/// <summary>
+	/// Funcion que le baja la vida al Esqueleto, es llamado por cada objeto con un script QuitarVidaArma con un bool llamado "DañarAPlayer" desactivado.
+	/// </summary>
+	public void BajarVida(float Daño){
+		_VidaEnemigo -= Daño;
+	}
 
 
 }
