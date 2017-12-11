@@ -14,18 +14,18 @@ public class EnemySkeletonController : MonoBehaviour {
     private bool _Saltar;
     private Rigidbody2D _cuerpoEnemigo;
     private Animator _animatorEnemigo;
-
+	private float _VidaEnemigo = 1;
 
     //publicas
     public float velocidadCaminar;
     public float fuerzaSalto;
-	public float _VidaEnemigo = 1;
+	public bool Estatico;
     
     /// <summary>
     /// IA DEL ENEMIGO EN ESTE TRAMO
     /// </summary>
     
-    //Estas han de ser privadas por su uso en el script y por tenmas de perdidas de datos al fluir por otras plataformas, tales como servidores futuros, etc.
+    //Estas han de ser privadas por su uso en el script y por temas de perdidas de datos al fluir por otras plataformas, tales como servidores futuros, etc.
     private AnimationClip _AnimacionAtaque;
     private GameObject _ArmaGuardada;
     private bool _isLanzarCuchillo = false;
@@ -34,8 +34,7 @@ public class EnemySkeletonController : MonoBehaviour {
     private bool _VoltearCaminar;
 	private Vector2 _PosicionJugador;
 
-    [SerializeField]  //De esta forma podemos depurar la private sin ser public ;)
-    private bool _Caminar = false; 
+    //[SerializeField]  De esta forma podemos depurar la private sin ser public ;)
 
     public GameObject Arma;
     public GameObject PosicionadorArma;
@@ -67,18 +66,6 @@ public class EnemySkeletonController : MonoBehaviour {
         set
         {
             _MirarHaciaIzquierda = value;
-        }
-    }
-    public bool Caminar
-    {
-        get
-        {
-            return _Caminar;
-        }
-
-        set
-        {
-            _Caminar = value;
         }
     }
     public bool isLanzarCuchillo
@@ -268,11 +255,14 @@ public class EnemySkeletonController : MonoBehaviour {
         //Caminar y Atacar:
         if (!JugadorEnPlataforma) // Si el jugador no esta en la plataforma no atacara y caminara o se mantendrá quieto:
         {
-			if (Caminar) {
-				CuerpoEnemigo.velocity = new Vector2 (velocidadCaminar, CuerpoEnemigo.velocity.y);
+			//Verificar si el esqueleto está configurado para caminar o para estar estático:
+			if (Estatico) {
+				_animatorEnemigo.SetFloat ("walk",-0.1f);
 				DejarAtacar();
-			} else { // Si el enemigo no debe caminar, se mantendra quieto, en idle.
-				DejarAtacar();
+			} else {
+					CuerpoEnemigo.velocity = new Vector2 (velocidadCaminar, CuerpoEnemigo.velocity.y);
+					_animatorEnemigo.SetFloat ("walk",0.1f);
+					DejarAtacar();
 			}
         }
         else //En cambio si el jugador esta en la plataforma no caminara y atacara:
@@ -280,7 +270,7 @@ public class EnemySkeletonController : MonoBehaviour {
 				Atacar ();
         }
 
-        //Voltear al Enemigo
+        //Voltear al Ene1migo
         if (Voltear)
         {
 			Enemigo.GetComponent<SpriteRenderer> ().flipX = Enemigo.GetComponent<SpriteRenderer> ().flipX ? false : true;

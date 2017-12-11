@@ -128,23 +128,23 @@ public class PlayerAndHUDController : MonoBehaviour {
 			_ContadorSalto = 0;
 		}
 
-        AnimatorJugador.SetFloat("speed", Mathf.Abs(CuerpoJugador.velocity.x));
-
-        if (PulsoDe) //Si hemos pulsado el boton de la derecha le cambiamos escala y le aplicamos una fuerza
-        {
-            CuerpoJugador.velocity = new Vector2(velocidadJugador, CuerpoJugador.velocity.y);
+		if (PulsoDe) { //Si hemos pulsado el boton de la derecha le cambiamos escala y le aplicamos una fuerza
+			CuerpoJugador.velocity = new Vector2 (velocidadJugador, CuerpoJugador.velocity.y);
 			//Jugador.transform.localScale = new Vector3(TamañoX, Jugador.transform.localScale.y, 0f);
-			Jugador.GetComponent<SpriteRenderer>().flipX = false;
-        }
-        else if (PulsoIz) //Si pulsamos el de la izquierda se lanzara esto
-        {
-            CuerpoJugador.velocity = new Vector2(-velocidadJugador, CuerpoJugador.velocity.y);
+			Jugador.GetComponent<SpriteRenderer> ().flipX = false;
+			AnimatorJugador.SetFloat ("speed", 0.2f);
+		} else if (PulsoIz) { //Si pulsamos el de la izquierda se lanzara esto
+			CuerpoJugador.velocity = new Vector2 (-velocidadJugador, CuerpoJugador.velocity.y);
 			//Jugador.transform.localScale = new Vector3(-TamañoX, Jugador.transform.localScale.y, 0f);
-			Jugador.GetComponent<SpriteRenderer>().flipX = true;
-        }
+			Jugador.GetComponent<SpriteRenderer> ().flipX = true;
+			AnimatorJugador.SetFloat ("speed", 0.2f);
+		} else {
+			AnimatorJugador.SetFloat ("speed", 0);
+			CuerpoJugador.velocity = new Vector2 (0, CuerpoJugador.velocity.y);
+		}
 
 		if (_Saltar && (_EnSuelo || _ContadorSalto <= 1)) {
-			CuerpoJugador.velocity = new Vector2 (CuerpoJugador.velocity.x, fuerzaSalto);
+			CuerpoJugador.velocity = new Vector2 (0, fuerzaSalto);
 			AnimatorJugador.SetFloat ("vSpeed", Mathf.Abs (CuerpoJugador.velocity.y));
 			_Saltar = false;
 		} else if(_EnSuelo) {
