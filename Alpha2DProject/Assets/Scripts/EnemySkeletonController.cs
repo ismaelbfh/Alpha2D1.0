@@ -15,6 +15,7 @@ public class EnemySkeletonController : MonoBehaviour {
     private Rigidbody2D _cuerpoEnemigo;
     private Animator _animatorEnemigo;
 	private float _VidaEnemigo = 1;
+	private bool EraEstatico;
 
     //publicas
     public float velocidadCaminar;
@@ -234,6 +235,7 @@ public class EnemySkeletonController : MonoBehaviour {
         AnimatorEnemigo = Enemigo.GetComponent<Animator>();
         PosicionJugador = new Vector2(0, 0);
 		ArmaGuardada = Arma;
+		EraEstatico = Estatico;
     }
 
     /// <summary>
@@ -246,7 +248,7 @@ public class EnemySkeletonController : MonoBehaviour {
 			velocidadCaminar = Mathf.Abs (velocidadCaminar);
 			PosicionadorArma.transform.localPosition = new Vector3 (Mathf.Abs(PosicionadorArma.transform.localPosition.x),PosicionadorArma.transform.localPosition.y,PosicionadorArma.transform.localPosition.z);
 		} else {//Viendo hacia la izquierda:
-			velocidadCaminar = velocidadCaminar == Mathf.Abs (velocidadCaminar) ? velocidadCaminar = velocidadCaminar * -1 : velocidadCaminar;
+			velocidadCaminar = velocidadCaminar == Mathf.Abs (velocidadCaminar) ? velocidadCaminar * -1 : velocidadCaminar;
 			if (PosicionadorArma.transform.localPosition.x == Mathf.Abs (PosicionadorArma.transform.localPosition.x)) {
 				PosicionadorArma.transform.localPosition = new Vector3 (PosicionadorArma.transform.localPosition.x * -1,PosicionadorArma.transform.localPosition.y,PosicionadorArma.transform.localPosition.z);
 			}
@@ -353,7 +355,36 @@ public class EnemySkeletonController : MonoBehaviour {
 	/// </summary>
 	public void BajarVida(float Daño){
 		_VidaEnemigo -= Daño;
+		//Activar Animacion de Electrocucion
+		_animatorEnemigo.SetBool("playerattack",true);
+		Estatico = true;
 	}
 
+	public void Morir(){
+		Destroy (this.gameObject);
+	}
+
+	public void TerminarBajarVida(){
+		if (_VidaEnemigo > 0) {
+			_animatorEnemigo.SetBool ("playerattack", false);
+
+			if (!EraEstatico) {
+				Estatico = false;
+			}
+
+		} else {
+
+			if (this.transform.localScale.x > 0.3f && this.transform.localScale.y > 0.3f) {
+				float x = this.transform.localScale.x;
+				float y = this.transform.localScale.y;
+				x -= 20 * Time.deltaTime;
+				y -= 20 * Time.deltaTime;
+				this.transform.localScale = new Vector3 (x, y, 1f);
+			} else {
+				Destroy (this.gameObject);
+			}
+		}
+
+	}
 
 }

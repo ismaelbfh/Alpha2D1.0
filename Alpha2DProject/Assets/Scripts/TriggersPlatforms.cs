@@ -5,7 +5,6 @@ using UnityEngine;
 public class TriggersPlatforms : MonoBehaviour {
 
     private EnemySkeletonController controladorEsqueleto;
-    private int contador = 1;
 
     public GameObject EsqueletoAsociado;
     public bool EsEnemigo;
@@ -25,7 +24,7 @@ public class TriggersPlatforms : MonoBehaviour {
 		//le da la posición del player cuando entró al collider.
         if (!EsEnemigo)
         {
-            if (Colision.tag == "Player")
+			if (Colision.tag == "Player" && EsqueletoAsociado != null)
             {
 				
                 controladorEsqueleto.JugadorEnPlataforma = true;
@@ -43,10 +42,9 @@ public class TriggersPlatforms : MonoBehaviour {
         else if (EsEnemigo)
         {
 
-            if (Colision.name == EsqueletoAsociado.name)
+			if (EsqueletoAsociado != null && Colision.name == EsqueletoAsociado.name)
             {
                 controladorEsqueleto.Voltear = true;
-                contador = 0;
             }
 
         }
@@ -66,26 +64,6 @@ public class TriggersPlatforms : MonoBehaviour {
                 controladorEsqueleto.PosicionJugador = new Vector2(0, 0);
                 controladorEsqueleto.VoltearCaminar = true;
             }
-        }
-        else
-        {
-            contador = 1;
-        }
-    }
-
-    /// <summary>
-    /// Activa la función de volteo del enemigo por si se queda trabado dentro del collider.
-    /// </summary>
-    private void OnTriggerStay2D(Collider2D Colision)
-    {
-        if (EsEnemigo)
-        {
-            if (Colision.name == EsqueletoAsociado.name && contador == 1)
-            {
-                controladorEsqueleto.Voltear = true;
-                contador = 0;
-            }
-
         }
     }
 

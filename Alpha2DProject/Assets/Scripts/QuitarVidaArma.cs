@@ -34,6 +34,16 @@ public class QuitarVidaArma : MonoBehaviour
 
 		if (colision.tag == "Enemy" && !DañarAPlayer) {
 			colision.GetComponent<EnemySkeletonController>().BajarVida(DañoACausar);
+			Instantiate (Resources.Load("Explosion"),this.transform.position,this.transform.rotation);
+			TriggersPlatforms[] Activadores = GameObject.FindObjectsOfType (typeof(TriggersPlatforms)) as TriggersPlatforms[];
+
+			foreach(TriggersPlatforms CActivador in Activadores){
+				if (CActivador.EsqueletoAsociado == colision.gameObject && !CActivador.EsEnemigo) {
+					CActivador.GetComponent<BoxCollider2D> ().size = new Vector2 (GameObject.Find("Fondo").transform.localScale.x * 4784,CActivador.GetComponent<BoxCollider2D> ().size.y);
+				}
+			}
+
+
 			Destroy(this.gameObject);
 		}
      }
