@@ -15,25 +15,29 @@ public class EnemySkeletonController : MonoBehaviour {
     private Rigidbody2D _cuerpoEnemigo;
     private Animator _animatorEnemigo;
 	private float _VidaEnemigo = 1;
-	private bool EraEstatico;
 
     //publicas
     public float velocidadCaminar;
     public float fuerzaSalto;
 	public bool Estatico;
-    
+
     /// <summary>
     /// IA DEL ENEMIGO EN ESTE TRAMO
     /// </summary>
-    
+
     //Estas han de ser privadas por su uso en el script y por temas de perdidas de datos al fluir por otras plataformas, tales como servidores futuros, etc.
     private AnimationClip _AnimacionAtaque;
     private GameObject _ArmaGuardada;
     private bool _isLanzarCuchillo = false;
-    private bool _MirarHaciaIzquierda = true;
     private bool _JugadorEnPlataforma = false;
     private bool _VoltearCaminar;
 	private Vector2 _PosicionJugador;
+    private bool _EraEstatico;
+    private float _RangoDetectarSuelo = 0.1f;
+    private bool _EnSuelo;
+    private Transform _VerificadorSuelo;
+    private LayerMask _LayerSuelo;
+    private float _ContadorAlEstarEstatico = 5;
 
     //[SerializeField]  De esta forma podemos depurar la private sin ser public ;)
 
@@ -55,18 +59,6 @@ public class EnemySkeletonController : MonoBehaviour {
         set
         {
             _JugadorEnPlataforma = value;
-        }
-    }
-    public bool MirarHaciaIzquierda
-    {
-        get
-        {
-            return _MirarHaciaIzquierda;
-        }
-
-        set
-        {
-            _MirarHaciaIzquierda = value;
         }
     }
     public bool isLanzarCuchillo
@@ -115,18 +107,6 @@ public class EnemySkeletonController : MonoBehaviour {
         set
         {
             _Voltear = value;
-        }
-    }
-    public bool Saltar
-    {
-        get
-        {
-            return _Saltar;
-        }
-
-        set
-        {
-            _Saltar = value;
         }
     }
     public bool VoltearCaminar
@@ -213,16 +193,15 @@ public class EnemySkeletonController : MonoBehaviour {
             _ImagenRendererEnemigo = value;
         }
 	}
-    public Vector2 PosicionJugador
+    public bool EraEstatico
     {
         get
         {
-            return _PosicionJugador;
+            return _EraEstatico;
         }
-
         set
         {
-            _PosicionJugador = value;
+            _EraEstatico = value;
         }
     }
 
@@ -233,9 +212,9 @@ public class EnemySkeletonController : MonoBehaviour {
 		TransformEnemigo = Enemigo.transform;
         CuerpoEnemigo = Enemigo.GetComponent<Rigidbody2D>();
         AnimatorEnemigo = Enemigo.GetComponent<Animator>();
-        PosicionJugador = new Vector2(0, 0);
 		ArmaGuardada = Arma;
-		EraEstatico = Estatico;
+        _LayerSuelo = GameObject.Find("HUD").GetComponent<PlayerAndHUDController>().LayerSuelo;
+        _VerificadorSuelo = this.transform.Find("ComprobadorSuelo");
     }
 
     /// <summary>
@@ -243,8 +222,11 @@ public class EnemySkeletonController : MonoBehaviour {
     /// </summary>
     private void FixedUpdate()
     {
+        //Detectar Suelo:
 
-		if (Enemigo.GetComponent<SpriteRenderer> ().flipX) {//Viendo hacia la derecha:
+        _EnSuelo = Physics2D.OverlapCircle(new Vector2(_VerificadorSuelo.position.x, _VerificadorSuelo.position.y), _RangoDetectarSuelo , _LayerSuelo);
+
+        if (Enemigo.GetComponent<SpriteRenderer> ().flipX) {//Viendo hacia la derecha:
 			velocidadCaminar = Mathf.Abs (velocidadCaminar);
 			PosicionadorArma.transform.localPosition = new Vector3 (Mathf.Abs(PosicionadorArma.transform.localPosition.x),PosicionadorArma.transform.localPosition.y,PosicionadorArma.transform.localPosition.z);
 		} else {//Viendo hacia la izquierda:
@@ -253,6 +235,18 @@ public class EnemySkeletonController : MonoBehaviour {
 				PosicionadorArma.transform.localPosition = new Vector3 (PosicionadorArma.transform.localPosition.x * -1,PosicionadorArma.transform.localPosition.y,PosicionadorArma.transform.localPosition.z);
 			}
 		}
+
+        if (Estatico && _ContadorAlEstarEstatico <= 0 && !AnimatorEnemigo.GetBool("attack") && !AnimatorEnemigo.GetBool("playerattack"))
+        {
+            _ContadorAlEstarEstatico = 5;
+            Voltear = true;
+        }else if (Estatico)
+        {
+            _ContadorAlEstarEstatico -= Time.deltaTime;
+        }else if (!Estatico)
+        {
+            _ContadorAlEstarEstatico = 5;
+        }
 
         //Caminar y Atacar:
         if (!JugadorEnPlataforma) // Si el jugador no esta en la plataforma no atacara y caminara o se mantendrá quieto:
@@ -272,15 +266,17 @@ public class EnemySkeletonController : MonoBehaviour {
 				Atacar ();
         }
 
-        //Voltear al Ene1migo
+        //Voltear al Enemigo
         if (Voltear)
         {
 			Enemigo.GetComponent<SpriteRenderer> ().flipX = Enemigo.GetComponent<SpriteRenderer> ().flipX ? false : true;
+            Vector2 ColliderEsquivador = transform.Find("ColliderEsquivador").GetComponent<BoxCollider2D>().offset;
+            transform.Find("ColliderEsquivador").GetComponent<BoxCollider2D>().offset = new Vector2(Mathf.Abs(ColliderEsquivador.x) == ColliderEsquivador.x ? ColliderEsquivador.x * -1 : Mathf.Abs(ColliderEsquivador.x), ColliderEsquivador.y);
 			Voltear = false;
         }
 
 		//Hacer que siempre valla hacia donde mira:
-        if (Saltar)
+        if (_Saltar)
         {
             AnimatorEnemigo.SetFloat("vspeed", 0.1f);
         }
@@ -303,7 +299,7 @@ public class EnemySkeletonController : MonoBehaviour {
 				isLanzarCuchillo = false;
 				Arma = (GameObject) Instantiate (Arma, PosicionadorArma.transform.position, PosicionadorArma.transform.rotation, TransformEnemigo);
 				Arma.transform.localPosition = PosicionadorArma.transform.localPosition;
-				if (MirarHaciaIzquierda) {
+				if (!Enemigo.GetComponent<SpriteRenderer>().flipX) {
 					Arma.GetComponent<Rigidbody2D> ().velocity = new Vector2 (-10, 0);
 				} else {
 					Arma.GetComponent<Rigidbody2D> ().velocity = new Vector2 (10, 0);
@@ -332,10 +328,11 @@ public class EnemySkeletonController : MonoBehaviour {
     /// <summary>
     /// Hace que el esqueleto Salte. No esta completo.
     /// </summary>
-    private void SaltarEsqueleto()
+    public void SaltarEsqueleto()
     {
-        if (Saltar )
+        if (_EnSuelo && !AnimatorEnemigo.GetBool("playerattack"))
         {
+            _Saltar = true;
             CuerpoEnemigo.velocity = new Vector3(0 /*Para que no se mueva mientras salta */, fuerzaSalto);
         }
     }
@@ -345,32 +342,25 @@ public class EnemySkeletonController : MonoBehaviour {
     /// </summary>
     private void DejarSaltar()
     {
-        Saltar = false;
-		AnimatorEnemigo.SetFloat("vspeed", CuerpoEnemigo.velocity.y);
+        _Saltar = false;
+        AnimatorEnemigo.SetFloat("vspeed", CuerpoEnemigo.velocity.y);
     }
 
 
-	/// <summary>
-	/// Funcion que le baja la vida al Esqueleto, es llamado por cada objeto con un script QuitarVidaArma con un bool llamado "DañarAPlayer" desactivado.
-	/// </summary>
-	public void BajarVida(float Daño){
+    /// <summary>
+    /// Funcion que le baja la vida al Esqueleto, es llamado por cada objeto con un script QuitarVidaArma con un bool llamado "DañarAPlayer" desactivado.
+    /// </summary>
+    public void BajarVida(float Daño){
 		_VidaEnemigo -= Daño;
 		//Activar Animacion de Electrocucion
 		_animatorEnemigo.SetBool("playerattack",true);
 		Estatico = true;
 	}
 
-	public void Morir(){
-		Destroy (this.gameObject);
-	}
-
 	public void TerminarBajarVida(){
 		if (_VidaEnemigo > 0) {
 			_animatorEnemigo.SetBool ("playerattack", false);
-
-			if (!EraEstatico) {
-				Estatico = false;
-			}
+            Estatico = !_EraEstatico ? false : true;
 
 		} else {
 
@@ -386,5 +376,17 @@ public class EnemySkeletonController : MonoBehaviour {
 		}
 
 	}
+
+    public void VoltearRespectoAObjeto(float PosicionXOtroObjeto)
+    {
+        if (PosicionXOtroObjeto < this.transform.position.x)
+        {
+            this.GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else if (PosicionXOtroObjeto > this.transform.position.x)
+        {
+            this.GetComponent<SpriteRenderer>().flipX = true;
+        }
+    }
 
 }

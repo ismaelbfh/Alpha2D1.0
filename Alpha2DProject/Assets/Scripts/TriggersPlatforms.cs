@@ -28,14 +28,15 @@ public class TriggersPlatforms : MonoBehaviour {
             {
 				
                 controladorEsqueleto.JugadorEnPlataforma = true;
-				//Voltear hacia la posición del esqueleto 1 vez:
-				if (Colision.transform.position.x < EsqueletoAsociado.transform.position.x) {
-					controladorEsqueleto.MirarHaciaIzquierda = true;
-					controladorEsqueleto.GetComponent<SpriteRenderer>().flipX = false;
-				} else if (Colision.transform.position.x > EsqueletoAsociado.transform.position.x) {
-					controladorEsqueleto.MirarHaciaIzquierda = false;
-					controladorEsqueleto.GetComponent<SpriteRenderer>().flipX = true;
-				}
+                //Voltear hacia la posición del esqueleto 1 vez:
+                //if (Colision.transform.position.x < EsqueletoAsociado.transform.position.x) {
+                //	controladorEsqueleto.MirarHaciaIzquierda = true;
+                //	controladorEsqueleto.GetComponent<SpriteRenderer>().flipX = false;
+                //} else if (Colision.transform.position.x > EsqueletoAsociado.transform.position.x) {
+                //	controladorEsqueleto.MirarHaciaIzquierda = false;
+                //	controladorEsqueleto.GetComponent<SpriteRenderer>().flipX = true;
+                //}
+                controladorEsqueleto.VoltearRespectoAObjeto(Colision.transform.position.x);
             }
 		}//Si el collider esta activado como verificador de limite de caminar del enemigo y si es el enemigo que entra en el trigger del collider activa la función 
 		//de voltearse y le dice la posición del jugador cuando entro al collider.
@@ -61,8 +62,8 @@ public class TriggersPlatforms : MonoBehaviour {
             if (Colision.tag == "Player")
             {
                 controladorEsqueleto.JugadorEnPlataforma = false;
-                controladorEsqueleto.PosicionJugador = new Vector2(0, 0);
-                controladorEsqueleto.VoltearCaminar = true;
+                //controladorEsqueleto.VoltearCaminar = true;
+                controladorEsqueleto.VoltearRespectoAObjeto(Colision.transform.position.x);
             }
         }
     }

@@ -30,10 +30,10 @@ public class QuitarVidaArma : MonoBehaviour
          {
              ScriptPlayer.BajarVida(DañoACausar);
              Destroy(this.gameObject);
-         }
-
-		if (colision.tag == "Enemy" && !DañarAPlayer) {
-			colision.GetComponent<EnemySkeletonController>().BajarVida(DañoACausar);
+         }else if (colision.tag == "Enemy" && !DañarAPlayer) {
+            EnemySkeletonController EsqueletoSC = colision.GetComponent<EnemySkeletonController>();
+            EsqueletoSC.EraEstatico = true;
+            EsqueletoSC.BajarVida(DañoACausar);
 			Instantiate (Resources.Load("Explosion"),this.transform.position,this.transform.rotation);
 			TriggersPlatforms[] Activadores = GameObject.FindObjectsOfType (typeof(TriggersPlatforms)) as TriggersPlatforms[];
 
@@ -45,15 +45,19 @@ public class QuitarVidaArma : MonoBehaviour
 
 
 			Destroy(this.gameObject);
-		}
+        }
+        else if(!colision.isTrigger)
+        {
+            Destroy(this.gameObject);
+        }
      }
 
 	/// <summary>
 	/// Contador que elimina el objeto despúes de un tiempo definido anteriormente.
 	/// </summary>
-     void Update()
+     void FixedUpdate()
      {
-		if (contadorEliminar <= 0)
+        if (contadorEliminar <= 0)
          {
              Destroy(this.gameObject);
          }
